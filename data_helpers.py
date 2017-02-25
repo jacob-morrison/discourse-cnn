@@ -6,7 +6,8 @@ from pprint import pprint
 def load_labels_and_data(model_file, data_file):
 	labels = {}
 	print "Loading model"
-	model = gs.models.Word2Vec.load_word2vec_format(model_file, binary=True)
+        model = gs.models.KeyedVectors.load_word2vec_format(model_file, binary=True)
+	#model = gs.models.Word2Vec.load_word2vec_format(model_file, binary=True)
 	print "Model loaded"
 	# default these to the most popular sub-categories
 	labels['Temporal'] = 0

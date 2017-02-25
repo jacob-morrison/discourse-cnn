@@ -3,6 +3,9 @@
 import tensorflow as tf
 import numpy as np
 import data_helpers
+import os
+import time
+import datetime
 
 # parameters
 learning_rate = 0.001
@@ -14,7 +17,7 @@ display_step = 10
 n_input = 50 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 sen_dim = 300
 n_classes = 15 # 15 total senses
-dropout = 0.75 # dropout probability
+dropout = 1.0 # dropout probability
 
 # tf graph input
 x1 = tf.placeholder(tf.float32, [None, sen_dim, n_input])
@@ -106,10 +109,15 @@ with tf.Session() as sess:
 	step = 1
 	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt')
 	# keep training until we reach max iterations
+        print(len(sentences1))
 	while step * batch_size < training_iters:
-		batch_x1 = sentences1[step * batch_size : (step + 1) * batch_size]
-		batch_x2 = sentences2[step * batch_size : (step + 1) * batch_size]
-		batch_y = labels[step * batch_size : (step + 1) * batch_size]
+                start = (step * batch_size) % len(sentences1)
+                end = ((step + 1) * batch_size) % len(sentences1)
+                if end < start:
+                        end = len(sentences1)
+		batch_x1 = sentences1[start : end]
+		batch_x2 = sentences2[start : end]
+		batch_y = labels[start : end]
 		sess.run(optimizer, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y, keep_prob: dropout})
 
 		if step % display_step == 0:
@@ -125,6 +133,7 @@ with tf.Session() as sess:
 	print "Training finished!"
 
 	#then save model
+        timestamp = str(int(time.time()))
 	out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", timestamp))
     # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
 	checkpoint_dir = os.path.abspath(os.path.join(out_dir, "checkpoints"))
