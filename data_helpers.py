@@ -65,10 +65,10 @@ def load_labels_and_data(model_file, data_file):
 def pad_or_cut(sen):
 	words = sen.split(" ")
 	l = len(words)
-	if l > 50:
-		ret_sen = words[:50]
+	if l > 20:
+		ret_sen = words[:20]
 	else:
-		ret_sen = words + ['<PAD>'] * (50 - l)
+		ret_sen = words + ['<PAD>'] * (20 - l)
 	return ret_sen
 
 def get_sentence_matrix(sentence, model):

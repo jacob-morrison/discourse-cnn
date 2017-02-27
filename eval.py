@@ -6,7 +6,7 @@ import time
 import datetime
 
 #500k iterations
-checkpoint_dir = './runs/1488099198/checkpoints/'
+checkpoint_dir = './runs/1488177489/checkpoints/'
 
 #no dropout
 #checkpoint_dir = './runs/1488069320/checkpoints/'
