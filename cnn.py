@@ -9,15 +9,15 @@ import datetime
 
 # parameters
 learning_rate = 0.001
-training_iters = 200000
-batch_size = 128
+training_iters = 20000
+batch_size = 256
 display_step = 10
 
 # network parameters
 n_input = 50 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 sen_dim = 300
 n_classes = 15 # 15 total senses
-dropout = 1.0 # dropout probability
+dropout = .25 # dropout probability
 
 # tf graph input
 x1 = tf.placeholder(tf.float32, [None, sen_dim, n_input])
@@ -43,12 +43,12 @@ def conv_net(x, weights, biases, dropout):
 
 	# convolutional layer
 	conv1 = conv2d(x, weights['wc1'], biases['bc1'])
-	# max pooling (down-sampling)
+	#max pooling (down-sampling)
 	conv1 = maxpool2d(conv1, k=2)
 
     # Convolution Layer
 	conv2 = conv2d(conv1, weights['wc2'], biases['bc2'])
-    # Max Pooling (down-sampling)
+        #Max Pooling (down-sampling)
 	conv2 = maxpool2d(conv2, k=2)
 
     # fully connected layer
@@ -69,7 +69,7 @@ weights = {
     'wc2': tf.Variable(tf.random_normal([5, 5, 32, 64],dtype=tf.float32)),
     # fully connected, 7*7*64 inputs, 64 outputs
     'wd1': tf.Variable(tf.random_normal([1014*64, 64],dtype=tf.float32)),
-    # 128 inputs, 10 outputs (class prediction)
+    # 128 inputs, 15 outputs (class prediction)
     'out': tf.Variable(tf.random_normal([128, n_classes],dtype=tf.float32))
 }
 
@@ -104,6 +104,12 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 init = tf.global_variables_initializer()
 
 # launch the graph
+saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
+tf.add_to_collection('accuracy', accuracy)
+tf.add_to_collection('x1', x1)
+tf.add_to_collection('x2', x2)
+tf.add_to_collection('y', y)
+tf.add_to_collection('keep_prob', keep_prob)
 with tf.Session() as sess:
 	sess.run(init)
 	step = 1
@@ -140,8 +146,6 @@ with tf.Session() as sess:
 	checkpoint_prefix = os.path.join(checkpoint_dir, "model")
 	if not os.path.exists(checkpoint_dir):
 		os.makedirs(checkpoint_dir)
-	saver = tf.train.Saver(tf.global_variables(), max_to_keep=1)
-
 	path = saver.save(sess, checkpoint_prefix, global_step=1)
 	print("Saved model checkpoint to {}\n".format(path))
 
