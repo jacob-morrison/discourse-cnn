@@ -6,10 +6,10 @@ import time
 import datetime
 
 #500k iterations
-checkpoint_dir = './runs/1488177489/checkpoints/'
+#checkpoint_dir = './runs/1488177489/checkpoints/'
 
 #no dropout
-#checkpoint_dir = './runs/1488069320/checkpoints/'
+checkpoint_dir = './runs/1488327187/checkpoints/'
 
 #with dropout
 #checkpoint_dir = './runs/1488072754/checkpoints/'
@@ -26,7 +26,7 @@ with tf.Session() as sess:
         keep_prob = tf.get_collection('keep_prob')[0]
         print("Loaded graph")
         print("Loading model")
-	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/devImplicitPDTB.txt')
+	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt')#'./Data/devImplicitPDTB.txt')
 	print("Loaded model")
 	print("Calculating accuracy")
 	accuracy = sess.run(accuracy, feed_dict={x1: sentences1, x2: sentences2, y: labels, keep_prob: 1.0})

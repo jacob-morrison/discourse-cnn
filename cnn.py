@@ -8,16 +8,16 @@ import time
 import datetime
 
 # parameters
-learning_rate = 0.001
-training_iters = 200000
-batch_size = 143
+learning_rate = 0.01
+training_iters = 20000
+batch_size = 168
 display_step = 10
 
 # network parameters
-n_input = 20 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
+n_input = 25 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 sen_dim = 300
 n_classes = 15 # 15 total senses
-dropout = 0.85 # dropout probability
+dropout = 1.0 # dropout probability
 
 # tf graph input
 x1 = tf.placeholder(tf.float32, [None, sen_dim, n_input])
@@ -41,18 +41,17 @@ def conv1d(x, W, b, strides=1):
         x = tf.nn.bias_add(x, b)
         return tf.nn.relu(x)
 
-def maxpool1d(x, k=2):
+#def maxpool1d(x, k=2):
         
 
 # create model
 def conv_net(x, weights, biases, dropout):
 	# reshape input
-	x = tf.reshape(x, shape=[-1, 30, 50, 1])
-
+	x = tf.reshape(x, shape=[-1, 25, 300, 1])
 	# convolutional layer
 	conv1 = conv2d(x, weights['wc1'], biases['bc1'])
 	#max pooling (down-sampling)
-	#conv1 = maxpool2d(conv1, k=2)
+	conv1 = maxpool2d(conv1, k=2)
 
     # Convolution Layer
 	conv2 = conv2d(conv1, weights['wc2'], biases['bc2'])
@@ -76,7 +75,7 @@ weights = {
     # 5x5 conv, 32 inputs, 64 outputs
     'wc2': tf.Variable(tf.random_normal([5, 5, 32, 64],dtype=tf.float32)),
     # fully connected, 7*7*64 inputs, 64 outputs
-    'wd1': tf.Variable(tf.random_normal([104*256, 64],dtype=tf.float32)),
+    'wd1': tf.Variable(tf.random_normal([525*64, 64],dtype=tf.float32)),
     # 128 inputs, 15 outputs (class prediction)
     'out': tf.Variable(tf.random_normal([128, n_classes],dtype=tf.float32))
 }
@@ -91,6 +90,7 @@ biases = {
 # need to get a prediction for each sentence
 
 # get the vector representation of each word
+print(tf.shape(x1))
 pred1 = conv_net(x1, weights, biases, keep_prob)
 pred2 = conv_net(x2, weights, biases, keep_prob)
 
@@ -160,5 +160,4 @@ with tf.Session() as sess:
 	path = saver.save(sess, checkpoint_prefix, global_step=1)
 	print("Saved model checkpoint to {}\n".format(path))
 
-
-
+        print("testing accuracy on training set: " + str(sess.run(accuracy, feed_dict={x1: sentences1, x2: sentences2, y: labels, keep_prob: 1.})))

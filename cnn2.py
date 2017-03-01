@@ -8,9 +8,9 @@ import time
 import datetime
 
 # parameters
-learning_rate = 0.001
-training_iters = 200000
-batch_size = 143
+learning_rate = 0.01
+training_iters = 400000
+batch_size = 168
 display_step = 10
 
 # network parameters
@@ -20,8 +20,8 @@ n_classes = 15 # 15 total senses
 dropout = 0.85 # dropout probability
 
 # tf graph input
-x1 = tf.placeholder(tf.float32, [None, sen_dim, n_input])
-x2 = tf.placeholder(tf.float32, [None, sen_dim, n_input])
+x1 = tf.placeholder(tf.float32, [None, sen_dim])
+x2 = tf.placeholder(tf.float32, [None, sen_dim])
 y = tf.placeholder(tf.float32, [None, n_classes])
 keep_prob = tf.placeholder(tf.float32) # dropout (keep probability)
 
@@ -47,14 +47,15 @@ biases = {
 # need to get a prediction for each sentence
 
 # get the vector representation of each word
-pred1 = np.mean(x1, axis=0)#conv_net(x1, weights, biases, keep_prob)
-pred2 = np.mean(x2, axis=0)#conv_net(x2, weights, biases, keep_prob)
+#pred1 = np.mean(x1, axis=1)#conv_net(x1, weights, biases, keep_prob)
+#pred2 = np.mean(x2, axis=1)#conv_net(x2, weights, biases, keep_prob)
 
 # concatenate both representations
-out = tf.concat(1, [pred1, pred2])
+out = tf.concat(1, [x1, x2])#[pred1, pred2])
 
 # predict the relation class
-pred = tf.add(tf.matmul(out, weights['out']), biases['out'])
+pred = tf.add(tf.batch_matmul(out, weights['out']), biases['out'])
+print(tf.shape(pred))
 
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
@@ -77,7 +78,7 @@ tf.add_to_collection('keep_prob', keep_prob)
 with tf.Session() as sess:
 	sess.run(init)
 	step = 1
-	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt')
+	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt', True)
 	# keep training until we reach max iterations
         print(len(sentences1))
 	while step * batch_size < training_iters:
@@ -88,9 +89,9 @@ with tf.Session() as sess:
 		batch_x1 = sentences1[start : end]
 		batch_x2 = sentences2[start : end]
 		batch_y = labels[start : end]
-                #print(batch_x1[0])
-                #print(batch_x2[0])
-                #print(batch_y[0])
+                #print(len(batch_x1))
+                #print(len(batch_x2))
+                #print(len(batch_y))
 		sess.run(optimizer, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y, keep_prob: dropout})
 
 		if step % display_step == 0:
@@ -115,6 +116,9 @@ with tf.Session() as sess:
 		os.makedirs(checkpoint_dir)
 	path = saver.save(sess, checkpoint_prefix, global_step=1)
 	print("Saved model checkpoint to {}\n".format(path))
-
-
+        accc = sess.run(accuracy, feed_dict={x1: sentences1, x2: sentences2, y: labels, keep_prob: 1.})
+        print("testing accuracy on training set: " + str(accc))
+        sentences12, sentences22, labels2 = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/devImplicitPDTB.txt', True)
+        accc = sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, keep_prob: 1.})
+        print("testing accuracy on dev set: " + str(accc))
 
