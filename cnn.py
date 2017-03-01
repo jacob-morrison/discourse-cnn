@@ -36,10 +36,10 @@ def maxpool2d(x, k=2):
 	# MaxPool2D wrapper
 	return tf.nn.max_pool(x, ksize=[1, k, k, 1], strides=[1, k, k, 1], padding='SAME')
 
-def conv1d(x, W, b, strides=1):
-        x = tf.nn.conv1d(x, W, b, strides, padding='SAME')
-        x = tf.nn.bias_add(x, b)
-        return tf.nn.relu(x)
+#def conv1d(x, W, b, strides=1):
+#        x = tf.nn.conv1d(x, W, b, strides, padding='SAME')
+#        x = tf.nn.bias_add(x, b)
+#        return tf.nn.relu(x)
 
 #def maxpool1d(x, k=2):
         
@@ -47,7 +47,7 @@ def conv1d(x, W, b, strides=1):
 # create model
 def conv_net(x, weights, biases, dropout):
 	# reshape input
-	x = tf.reshape(x, shape=[-1, 25, 300, 1])
+	x = tf.reshape(x, shape=[-1, sen_dim, n_input, 1])
 	# convolutional layer
 	conv1 = conv2d(x, weights['wc1'], biases['bc1'])
 	#max pooling (down-sampling)
@@ -98,7 +98,7 @@ pred2 = conv_net(x2, weights, biases, keep_prob)
 out = tf.concat(1, [pred1, pred2])
 
 # predict the relation class
-pred = tf.add(tf.matmul(out, weights['out']), biases['out'])
+pred = tf.add(tf.batch_matmul(out, weights['out']), biases['out'])
 
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
