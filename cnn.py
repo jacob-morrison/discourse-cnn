@@ -9,15 +9,15 @@ import datetime
 
 # parameters
 learning_rate = 0.01
-training_iters = 20000
-batch_size = 168
+training_iters = 150000
+batch_size = 42
 display_step = 10
 
 # network parameters
 n_input = 25 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 sen_dim = 300
 n_classes = 15 # 15 total senses
-dropout = 1.0 # dropout probability
+dropout = 0.80 # dropout probability
 
 # tf graph input
 x1 = tf.placeholder(tf.float32, [None, sen_dim, n_input])
@@ -52,21 +52,21 @@ def conv_net(x, weights, biases, dropout):
 	conv1 = conv2d(x, weights['wc1'], biases['bc1'])
 	#max pooling (down-sampling)
 	conv1 = maxpool2d(conv1, k=2)
-
+        return tf.reshape(conv1, shape=[-1, 300*13*32])
     # Convolution Layer
-	conv2 = conv2d(conv1, weights['wc2'], biases['bc2'])
+	#conv2 = conv2d(conv1, weights['wc2'], biases['bc2'])
         #Max Pooling (down-sampling)
-	conv2 = maxpool2d(conv2, k=2)
+	#conv2 = maxpool2d(conv2, k=2)
 
     # fully connected layer
     # reshape conv2 output to fit the fully connected layer input
-	fc1 = tf.reshape(conv2, [-1, weights['wd1'].get_shape().as_list()[0]])
-	fc1 = tf.add(tf.matmul(fc1, weights['wd1']), biases['bd1'])
-	fc1 = tf.nn.relu(fc1)
+        #fc1 = tf.reshape(conv2, [lenx,  weights['wd1'].get_shape().as_list()[0]])
+	#fc1 = tf.nn.bias_add(tf.batch_matmul(fc1, weights['wd1']), biases['bd1'])
+	#fc1 = tf.nn.relu(fc1)
 	# apply dropout
-	fc1 = tf.nn.dropout(fc1, dropout)
+	#fc1 = tf.nn.dropout(fc1, dropout)
 
-	return fc1
+	#return fc1
 
 # Store layers weight & bias
 weights = {
@@ -77,7 +77,7 @@ weights = {
     # fully connected, 7*7*64 inputs, 64 outputs
     'wd1': tf.Variable(tf.random_normal([525*64, 64],dtype=tf.float32)),
     # 128 inputs, 15 outputs (class prediction)
-    'out': tf.Variable(tf.random_normal([128, n_classes],dtype=tf.float32))
+    'out': tf.Variable(tf.random_normal([124800, n_classes],dtype=tf.float32))
 }
 
 biases = {
@@ -95,7 +95,7 @@ pred1 = conv_net(x1, weights, biases, keep_prob)
 pred2 = conv_net(x2, weights, biases, keep_prob)
 
 # concatenate both representations
-out = tf.concat(1, [pred1, pred2])
+out = tf.concat(0, [pred1, pred2])
 
 # predict the relation class
 pred = tf.add(tf.batch_matmul(out, weights['out']), biases['out'])
@@ -123,12 +123,16 @@ with tf.Session() as sess:
 	step = 1
 	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt')
 	# keep training until we reach max iterations
-        print(len(sentences1))
+        #print(len(sentences1))
 	while step * batch_size < training_iters:
+                #print(len(sentences1))
                 start = (step * batch_size) % len(sentences1)
                 end = ((step + 1) * batch_size) % len(sentences1)
-                if end < start:
+                #print(start)
+                #print(end)
+                if end <= start:
                         end = len(sentences1)
+                #print(end)
 		batch_x1 = sentences1[start : end]
 		batch_x2 = sentences2[start : end]
 		batch_y = labels[start : end]
@@ -160,4 +164,46 @@ with tf.Session() as sess:
 	path = saver.save(sess, checkpoint_prefix, global_step=1)
 	print("Saved model checkpoint to {}\n".format(path))
 
-        print("testing accuracy on training set: " + str(sess.run(accuracy, feed_dict={x1: sentences1, x2: sentences2, y: labels, keep_prob: 1.})))
+        print("testing accuracy on training set: ")#
+        step = 0
+        acc = 0.
+        #sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt')
+        print(len(sentences1))
+        batch_size2 = batch_size * 2
+        while step * batch_size2 < len(sentences1):
+                start = (step * batch_size2)
+                end = ((step + 1) * batch_size2)
+                if end > len(sentences1):
+                        end = len(sentences1)
+                batch_x1 = sentences1[start : end]
+                batch_x2 = sentences2[start : end]
+                batch_y = labels[start : end]
+                #print(len(batch_x1[0]))                                                                                                                                           
+                #print(len(batch_x2[0]))
+                #print(len(batch_y[0])) 
+                acc += sess.run(accuracy, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y, keep_prob: 1.})
+                step += 1
+        print(str(acc/(len(sentences1)/batch_size)))
+        print(str(acc/step))
+
+        sentences12, sentences22, labels2 = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/devImplicitPDTB.txt')                          
+        print(len(sentences12))
+        batch_size2 = batch_size * 2
+        step = 0
+        acc = 0.
+        while step * batch_size2 < len(sentences12):
+                start = (step * batch_size2)
+                end = ((step + 1) * batch_size2)
+                if end > len(sentences12):
+                        end = len(sentences1)
+                if start >= len(sentences12):
+                        break;
+                batch_x1 = sentences12[start : end]
+                batch_x2 = sentences22[start : end]
+                batch_y = labels2[start : end]
+                acc += (sess.run(accuracy, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y, keep_prob: 1.})/(len(batch_x1)/len(sentences12)))
+                step += 1
+        print(acc)
+        #print(str(acc/(len(sentences1)/batch_size)))
+        #print(str(acc/step))
+        #print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, keep_prob: 1.})))
