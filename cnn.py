@@ -125,20 +125,13 @@ with tf.Session() as sess:
 	# keep training until we reach max iterations
         #print(len(sentences1))
 	while step * batch_size < training_iters:
-                #print(len(sentences1))
-                start = (step * batch_size) % len(sentences1)
-                end = ((step + 1) * batch_size) % len(sentences1)
-                #print(start)
-                #print(end)
-                if end <= start:
-                        end = len(sentences1)
-                #print(end)
+        start = (step * batch_size) % len(sentences1)
+        end = ((step + 1) * batch_size) % len(sentences1)
+        if end <= start:
+                end = len(sentences1)
 		batch_x1 = sentences1[start : end]
 		batch_x2 = sentences2[start : end]
 		batch_y = labels[start : end]
-                #print(batch_x1[0])
-                #print(batch_x2[0])
-                #print(batch_y[0])
 		sess.run(optimizer, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y, keep_prob: dropout})
 
 		if step % display_step == 0:
@@ -178,9 +171,6 @@ with tf.Session() as sess:
                 batch_x1 = sentences1[start : end]
                 batch_x2 = sentences2[start : end]
                 batch_y = labels[start : end]
-                #print(len(batch_x1[0]))                                                                                                                                           
-                #print(len(batch_x2[0]))
-                #print(len(batch_y[0])) 
                 acc += sess.run(accuracy, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y, keep_prob: 1.})
                 step += 1
         print(str(acc/(len(sentences1)/batch_size)))
@@ -195,7 +185,7 @@ with tf.Session() as sess:
                 start = (step * batch_size2)
                 end = ((step + 1) * batch_size2)
                 if end > len(sentences12):
-                        end = len(sentences1)
+                        end = len(sentences12)
                 if start >= len(sentences12):
                         break;
                 batch_x1 = sentences12[start : end]
