@@ -1,6 +1,7 @@
 import numpy as np
 import gensim as gs
 import sys
+from collections import Counter
 from pprint import pprint
 
 def load_labels_and_data(model_file, data_file, smallSentences=False):
@@ -61,18 +62,28 @@ def load_labels_and_data(model_file, data_file, smallSentences=False):
                                         sentences2.append(bigSen2)
 			#sentences1.append(get_sentence_matrix(sentence1, model))
 			#sentences2.append(get_sentence_matrix(sentence2, model))
-
+        total = len(ret_labels)
+        ls = Counter()
+        for l in ret_labels:
+                idx = np.argmax(l)
+                ls[idx] += 1
+        mx = 0
+        for i in range(15):
+                if ls[i] > mx:
+                        mx = ls[i]
+        print("Accuracy if we did nothing: " + str(float(mx)/total))
 	return sentences1, sentences2, ret_labels
 
 
 
 def pad_or_cut(sen):
+        sen_len = 50
 	words = sen.split(" ")
 	l = len(words)
-	if l > 25:
-		ret_sen = words[:25]
+	if l > sen_len:
+		ret_sen = words[:sen_len]
 	else:
-		ret_sen = words + ['<PAD>'] * (25 - l)
+		ret_sen = words + ['<PAD>'] * (sen_len - l)
 	return ret_sen
 
 def get_sentence_matrix(sentence, model):
