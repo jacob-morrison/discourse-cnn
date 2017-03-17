@@ -74,10 +74,33 @@ def load_labels_and_data(model_file, data_file, smallSentences=False):
         print("Accuracy if we did nothing: " + str(float(mx)/total))
 	return sentences1, sentences2, ret_labels
 
-
+def test(data_file):
+        total = 0
+        total50 = 0
+        total75 = 0
+        total100 = 0
+        with open(data_file) as f:
+                for line in f:
+                        total += 2
+                        tokens = line.split("|")
+                        sen1 = tokens[24].split()
+                        sen2 = tokens[34].split()
+                        if len(sen1) > 50:
+                                total50 += 1
+                        if len(sen1) > 75:
+                                total75 += 1
+                        if len(sen1) > 100:
+                                total100 += 1
+                        if len(sen2) > 50:
+                                total50 += 1
+                        if len(sen2) > 75:
+                                total75 += 1
+                        if len(sen2) > 100:
+                                total100 += 1
+        print(str(total) + " " + str(total50) + " " + str(total75) + " " + str(total100))
 
 def pad_or_cut(sen):
-        sen_len = 50
+        sen_len = 75
 	words = sen.split(" ")
 	l = len(words)
 	if l > sen_len:
@@ -101,4 +124,4 @@ def get_sentence_matrix(sentence, model):
 
 
 if __name__ == '__main__':
-	load_labels_and_data(sys.argv[1], sys.argv[2])
+	test(sys.argv[1])

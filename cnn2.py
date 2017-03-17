@@ -78,7 +78,9 @@ tf.add_to_collection('keep_prob', keep_prob)
 with tf.Session() as sess:
 	sess.run(init)
 	step = 1
-	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt', True)
+	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt')
+        sentences1 = np.mean(sentences1, axis=2)
+        sentences2 = np.mean(sentences2, axis=2)
 	# keep training until we reach max iterations
         print(len(sentences1))
 	while step * batch_size < training_iters:

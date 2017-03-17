@@ -69,9 +69,9 @@ tf.add_to_collection('keep_prob', keep_prob)
 with tf.Session() as sess:
 	sess.run(init)
 	step = 1
-	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt', True)
+	sentences1, sentences2, labels = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/implicitTrainPDTB.txt')
 	sentences1 = np.mean(sentences1, axis=1)
-    sentences2 = np.mean(sentences2, axis=1)
+        sentences2 = np.mean(sentences2, axis=1)
     # keep training until we reach max iterations
         print(len(sentences1))
 	while step * batch_size < training_iters:
@@ -111,7 +111,9 @@ with tf.Session() as sess:
 	print("Saved model checkpoint to {}\n".format(path))
         accc = sess.run(accuracy, feed_dict={x1: sentences1, x2: sentences2, y: labels, keep_prob: 1.})
         print("testing accuracy on training set: " + str(accc))
-        sentences12, sentences22, labels2 = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/devImplicitPDTB.txt', True)
+        sentences12, sentences22, labels2 = data_helpers.load_labels_and_data('./Data/GoogleNews-vectors-negative300.bin', './Data/devImplicitPDTB.txt')
+        sentences12 = np.mean(sentences12, axis=1)
+        sentences22 = np.mean(sentences22, axis=1)
         accc = sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, keep_prob: 1.})
         print("testing accuracy on dev set: " + str(accc))
 
