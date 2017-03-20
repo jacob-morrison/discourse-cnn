@@ -2,16 +2,17 @@
 
 import tensorflow as tf
 import numpy as np
+import data_helpers
 
-learning_rate = 0.01
-training_iters = 100000
-batch_size = 128
+learning_rate = 0.001
+training_iters = 250000
+batch_size = 64
 display_step = 10
 
 # network parameters
 n_input = 75 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 sen_dim = 300
-n_classes = 15 # 15 total senses
+n_classes = 16 # 15 total senses
 
 # tf graph input
 x1 = tf.placeholder(tf.float32, [None, sen_dim, n_input])
@@ -20,25 +21,43 @@ y = tf.placeholder(tf.float32, [None, n_classes])
 
 # Store layers weight & bias
 weights = {
-	'w': tf.Variable(tf.random_normal([150],dtype=tf.float32)),
-	'out': tf.Variable(tf.random_normal([300, n_classes],dtype=tf.float32))
+	'w': tf.Variable(tf.random_normal([2*n_input,1],dtype=tf.float32)),
+        'w2': tf.Variable(tf.random_normal([n_input,1],dtype=tf.float32)),
+        'out': tf.Variable(tf.random_normal([300, n_classes],dtype=tf.float32)),
+        'out2': tf.Variable(tf.random_normal([600, n_classes],dtype=tf.float32))
 }
 
 biases = {
-	'w': tf.Variable(tf.random_normal([300],dtype=tf.float32)),
-	'out': tf.Variable(tf.random_normal([n_classes],dtype=tf.float32))
+        'w': tf.Variable(tf.random_normal([300],dtype=tf.float32)),
+        'out': tf.Variable(tf.random_normal([n_classes],dtype=tf.float32)),
+	'w2': tf.Variable(tf.random_normal([600],dtype=tf.float32))
 }
-
+'''
 # put the sentences together
-out = tf.concat(1, [x1, x2])
-
+out = tf.concat(2, [x1, x2])
 # layer 1
-pred = tf.add(tf.batch_matmul(out, weights['w']), biases['w'])
-pred = tf.add(tf.batch_matmul(out, weights['out']), biases['out'])
+out = tf.reshape(out, [-1, 2 * n_input])
+pred = tf.matmul(out, weights['w'])
 
+pred = tf.add(tf.reshape(pred, [-1, 300]), biases['w'])
+print(pred.get_shape())
+
+pred = tf.add(tf.matmul(pred, weights['out']), biases['out'])
+print(pred.get_shape())
+'''
+# try 2
+x12 = tf.reshape(x1, [-1, n_input])                                                                                                                                                 
+x22 = tf.reshape(x2, [-1, n_input])                                                                                                                                                 
+x12 = tf.matmul(x12, weights['w2'])                                                                                                                                            
+x22 = tf.matmul(x22, weights['w2'])                                                                                                                                                
+x12 = tf.add(tf.reshape(x12, [-1, 300]), biases['w'])                                                                                                                               
+x22 = tf.add(tf.reshape(x22, [-1, 300]), biases['w'])
+print(x12.get_shape())
+pred = tf.concat(1, [x12, x22])
+pred = tf.add(tf.matmul(pred, weights['out2']), biases['out'])
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
-optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # Evaluate model
 correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))

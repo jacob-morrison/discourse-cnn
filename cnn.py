@@ -16,7 +16,7 @@ display_step = 10
 # network parameters
 n_input = 50 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 sen_dim = 300
-n_classes = 15 # 15 total senses
+n_classes = 16 # 16 total senses
 dropout = 0.60 # dropout probability
 
 # tf graph input

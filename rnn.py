@@ -9,7 +9,7 @@ import datetime
 
 # parameters
 learning_rate = 0.01
-training_iters = 100000
+training_iters = 200000
 batch_size = 128
 display_step = 10
 
@@ -17,7 +17,7 @@ display_step = 10
 n_input = 75 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 n_steps = 300
 n_hidden = 128 # hidden layer num of features
-n_classes = 15 # 15 total senses
+n_classes = 16 # 15 total senses
 
 # tf graph input
 x1 = tf.placeholder(tf.float32, [None, n_steps, n_input])
@@ -42,11 +42,11 @@ def RNN(x1, x2):
     x1 = tf.transpose(x1, [1, 0, 2])
     x2 = tf.transpose(x2, [1, 0, 2])
     # Reshaping to (n_steps*batch_size, n_input)
-    x1 = tf.reshape(x1, [-1, n_input])
-    x2 = tf.reshape(x2, [-1, n_input])
+    x1 = tf.reshape(x1, [-1, n_steps])
+    x2 = tf.reshape(x2, [-1, n_steps])
     # Split to get a list of 'n_steps' tensors of shape (batch_size, n_input)
-    x1 = tf.split(0, n_steps, x1)
-    x2 = tf.split(0, n_steps, x2)
+    x1 = tf.split(0, n_input, x1)
+    x2 = tf.split(0, n_input, x2)
 
     # Define a lstm cell with tensorflow
     with tf.variable_scope('lstm1'):

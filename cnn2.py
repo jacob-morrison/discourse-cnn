@@ -9,14 +9,14 @@ import datetime
 
 # parameters
 learning_rate = 0.01
-training_iters = 300000
+training_iters = 150000
 batch_size = 168
 display_step = 10
 
 # network parameters
-n_input = 20 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
+n_input = 75 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 sen_dim = 300
-n_classes = 15 # 15 total senses
+n_classes = 16 # 15 total senses
 dropout = 0.85 # dropout probability
 
 # tf graph input
@@ -54,8 +54,9 @@ biases = {
 out = tf.concat(1, [x1, x2])#[pred1, pred2])
 
 # predict the relation class
-pred = tf.add(tf.batch_matmul(out, weights['out']), biases['out'])
-print(tf.shape(pred))
+print(out.get_shape())
+pred = tf.add(tf.matmul(out, weights['out']), biases['out'])
+print(pred.get_shape())
 
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
