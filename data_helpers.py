@@ -26,12 +26,13 @@ def load_labels_and_data(model_file, data_file, smallSentences=False):
 	labels[('Comparison','Contrast')] = 6
 	labels[('Comparison','Pragmatic contrast')] = 7
 	labels[('Comparison','Concession')] = 8
-	labels[('Expansion','Instantiation')] = 9
-	labels[('Expansion','Restatement')] = 10
-	labels[('Expansion','Alternative')] = 11
-	labels[('Expansion','Exception')] = 12
-	labels[('Expansion','Conjunction')] = 13
-	labels[('Expansion','List')] = 14
+	labels[('Comparison','Pragmatic concession')] = 9
+	labels[('Expansion','Instantiation')] = 10
+	labels[('Expansion','Restatement')] = 11
+	labels[('Expansion','Alternative')] = 12
+	labels[('Expansion','Exception')] = 13
+	labels[('Expansion','Conjunction')] = 14
+	labels[('Expansion','List')] = 15
 
 	#
 	ret_labels = []
