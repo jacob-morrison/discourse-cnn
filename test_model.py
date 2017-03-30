@@ -25,7 +25,7 @@ weights = {
 	#'w2': tf.Variable(tf.random_normal([n_input,1],dtype=tf.float32)),
 	'w2': tf.constant(1.0/75, dtype=tf.float32, shape=[sen_dim,1]),
 	'out': tf.Variable(tf.random_normal([n_input, n_classes],dtype=tf.float32)),
-	'out2': tf.Variable(tf.random_normal([n_input*2, n_classes],dtype=tf.float32))
+	'out2': tf.Variable(tf.random_normal([sen_dim*2, n_classes],dtype=tf.float32))
 }
 
 biases = {
