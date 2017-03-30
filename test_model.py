@@ -22,14 +22,15 @@ y = tf.placeholder(tf.float32, [None, n_classes])
 # Store layers weight & bias
 weights = {
 	'w': tf.Variable(tf.random_normal([2*n_input,1],dtype=tf.float32)),
-        'w2': tf.Variable(tf.random_normal([n_input,1],dtype=tf.float32)),
-        'out': tf.Variable(tf.random_normal([300, n_classes],dtype=tf.float32)),
-        'out2': tf.Variable(tf.random_normal([600, n_classes],dtype=tf.float32))
+	#'w2': tf.Variable(tf.random_normal([n_input,1],dtype=tf.float32)),
+	'w2': tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1]),
+	'out': tf.Variable(tf.random_normal([300, n_classes],dtype=tf.float32)),
+	'out2': tf.Variable(tf.random_normal([600, n_classes],dtype=tf.float32))
 }
 
 biases = {
-        'w': tf.Variable(tf.random_normal([300],dtype=tf.float32)),
-        'out': tf.Variable(tf.random_normal([n_classes],dtype=tf.float32)),
+	'w': tf.Variable(tf.random_normal([300],dtype=tf.float32)),
+	'out': tf.Variable(tf.random_normal([n_classes],dtype=tf.float32)),
 	'w2': tf.Variable(tf.random_normal([600],dtype=tf.float32))
 }
 '''
