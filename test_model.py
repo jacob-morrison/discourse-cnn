@@ -55,6 +55,7 @@ x12 = tf.add(tf.reshape(x12, [-1, 300]), biases['w'])
 x22 = tf.add(tf.reshape(x22, [-1, 300]), biases['w'])
 print(x12.get_shape())
 pred = tf.concat(1, [x12, x22])
+print(pred.get_shape())
 pred = tf.add(tf.matmul(pred, weights['out2']), biases['out'])
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
