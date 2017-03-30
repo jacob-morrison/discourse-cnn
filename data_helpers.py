@@ -47,7 +47,7 @@ def load_labels_and_data(model_file, data_file, smallSentences=False):
 				strs = label.split('.')
 				if strs[1] == 'Pragmatic concession':
 					strs[1] = 'Concession'
-				lab_vec = np.zeros(15)
+				lab_vec = np.zeros(16)
 				lab_vec[labels[(strs[0], strs[1])]] = 1
 				#ret_labels.append(labels[(strs[0], strs[1])])
 				ret_labels.append(lab_vec)
