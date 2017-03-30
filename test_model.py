@@ -23,7 +23,7 @@ y = tf.placeholder(tf.float32, [None, n_classes])
 weights = {
 	#'w': tf.Variable(tf.random_normal([2*n_input,1],dtype=tf.float32)),
 	#'w2': tf.Variable(tf.random_normal([n_input,1],dtype=tf.float32)),
-	'w2': tf.constant(1.0/75, dtype=tf.float32, shape=[sen_dim,1]),
+	'w2': tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1]),
 	'out': tf.Variable(tf.random_normal([n_input, n_classes],dtype=tf.float32)),
 	'out2': tf.Variable(tf.random_normal([sen_dim*2, n_classes],dtype=tf.float32))
 }
@@ -47,8 +47,8 @@ pred = tf.add(tf.matmul(pred, weights['out']), biases['out'])
 print(pred.get_shape())
 '''
 # try 2
-x12 = tf.reshape(x1, [-1, sen_dim])                                                                                                                                                 
-x22 = tf.reshape(x2, [-1, sen_dim])                                                                                                                                                 
+x12 = tf.reshape(x1, [-1, n_input])                                                                                                                                                 
+x22 = tf.reshape(x2, [-1, n_input])                                                                                                                                                 
 x12 = tf.matmul(x12, weights['w2'])                                                                                                                                            
 x22 = tf.matmul(x22, weights['w2'])                                                                                                                                                
 x12 = tf.add(tf.reshape(x12, [-1, 300]), biases['w'])                                                                                                                               
