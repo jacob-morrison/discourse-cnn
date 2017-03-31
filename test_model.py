@@ -101,8 +101,8 @@ with tf.Session() as sess:
 				"{:.6f}".format(loss) + ", Training Accuracy= " + \
 				"{:.5f}".format(acc)
 			#extract variables here
-			#w2 = sess.run(biases['w'])
-			#print(w2)
+			w2 = sess.run(biases['w'])
+			print(w2)
 		step += 1
 	print "Training finished!"
 
