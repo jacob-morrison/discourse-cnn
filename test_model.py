@@ -100,9 +100,9 @@ with tf.Session() as sess:
 			print "Iter " + str(total) + ", Minibatch Loss= " + \
 				"{:.6f}".format(loss) + ", Training Accuracy= " + \
 				"{:.5f}".format(acc)
-			#extract variables here
-			w2 = sess.run(weights['w2'])
-			print(w2)
+			# extract variables here
+			#w2 = sess.run(weights['w2'])
+			#print(w2)
 		step += 1
 	print "Training finished!"
 
