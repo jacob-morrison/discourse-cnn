@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 import data_helpers
 
-learning_rate = 0.001
+learning_rate = 0.01
 training_iters = 300000
 batch_size = 64
 display_step = 10
