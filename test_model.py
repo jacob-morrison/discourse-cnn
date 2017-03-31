@@ -81,7 +81,7 @@ tf.add_to_collection('y', y)
 with tf.Session() as sess:
 	sess.run(init)
 	step = 1
-	model = data_helpers.load_model()
+	model = data_helpers.load_model('./Data/GoogleNews-vectors-negative300.bin')
 	sentences1, sentences2, labels = data_helpers.load_labels_and_data(model, './Data/implicitTrainPDTB.txt')
 	total = 0
 
