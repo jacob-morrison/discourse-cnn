@@ -29,7 +29,7 @@ weights = {
 }
 
 biases = {
-	'w': tf.Variable(tf.random_normal([300],dtype=tf.float32)),
+	'w': tf.Variable(tf.zeros([300],dtype=tf.float32)),
 	'out': tf.Variable(tf.random_normal([n_classes],dtype=tf.float32)),
 	'w2': tf.Variable(tf.random_normal([600],dtype=tf.float32))
 }
@@ -51,10 +51,10 @@ x12 = tf.reshape(x1, [-1, n_input])
 x22 = tf.reshape(x2, [-1, n_input])                                                                                                                                                 
 x12 = tf.matmul(x12, weights['w2'])                                                                                                                                            
 x22 = tf.matmul(x22, weights['w2'])
-x12 = tf.reshape(x12, [-1, 300])
-x22 = tf.reshape(x22, [-1, 300])
-#x12 = tf.add(tf.reshape(x12, [-1, 300]), biases['w'])                                                                                                                               
-#x22 = tf.add(tf.reshape(x22, [-1, 300]), biases['w'])
+#x12 = tf.reshape(x12, [-1, 300])
+#x22 = tf.reshape(x22, [-1, 300])
+x12 = tf.add(tf.reshape(x12, [-1, 300]), biases['w'])                                                                                                                               
+x22 = tf.add(tf.reshape(x22, [-1, 300]), biases['w'])
 print(x12.get_shape())
 pred = tf.concat(1, [x12, x22])
 print(pred.get_shape())
