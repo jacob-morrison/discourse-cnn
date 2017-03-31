@@ -51,11 +51,10 @@ x12 = tf.reshape(x1, [-1, n_input])
 x22 = tf.reshape(x2, [-1, n_input])                                                                                                                                                 
 x12 = tf.matmul(x12, weights['w2'])                                                                                                                                            
 x22 = tf.matmul(x22, weights['w2'])
-tf.Print(weights['w2'], [weights['w2']])
-#x12 = tf.reshape(x12, [-1, 300])
-#x22 = tf.reshape(x22, [-1, 300])
-x12 = tf.reshape(x12, [-1, 300]) + biases['w']
-x22 = tf.reshape(x22, [-1, 300]) + biases['w']
+x12 = tf.reshape(x12, [-1, 300])
+x22 = tf.reshape(x22, [-1, 300])
+#x12 = tf.reshape(x12, [-1, 300]) + biases['w']
+#x22 = tf.reshape(x22, [-1, 300]) + biases['w']
 pred = tf.concat(1, [x12, x22])
 pred = tf.add(tf.matmul(pred, weights['out2']), biases['out'])
 # define loss and optimizer
@@ -94,6 +93,8 @@ with tf.Session() as sess:
 		batch_y = labels[start : end]
 		total += (len(batch_x1))
 		sess.run(optimizer, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
+		w2 = sess.run(weights['w2'])
+		print(w2)
 		if step % display_step == 0:
 			#calculate batch loss and accuracy
 			loss, acc = sess.run([cost, accuracy], feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
