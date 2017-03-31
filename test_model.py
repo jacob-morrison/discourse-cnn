@@ -23,8 +23,8 @@ y = tf.placeholder(tf.float32, [None, n_classes])
 weights = {
 	#'w': tf.Variable(tf.random_normal([2*n_input,1],dtype=tf.float32)),
 	#'w2': tf.Variable(tf.random_normal([n_input,1],dtype=tf.float32)),
-	#'w2': tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1]),
-	'w2': tf.Variable(tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1])),
+	'w2': tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1]),
+	#'w2': tf.Variable(tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1])),
 	'out': tf.Variable(tf.random_normal([n_input, n_classes],dtype=tf.float32)),
 	'out2': tf.Variable(tf.random_normal([sen_dim*2, n_classes],dtype=tf.float32))
 }
