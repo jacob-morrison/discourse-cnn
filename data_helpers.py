@@ -4,12 +4,64 @@ import sys
 from collections import Counter
 from pprint import pprint
 
-def load_labels_and_data(model_file, data_file, smallSentences=False):
-	labels = {}
+def load_model(model_file):
 	print "Loading model"
 	model = gs.models.KeyedVectors.load_word2vec_format(model_file, binary=True)
-	#model = gs.models.Word2Vec.load_word2vec_format(model_file, binary=True)
 	print "Model loaded"
+	return model
+
+def load_labels_and_sentences(data_file):
+	labels	# otherwise assign them as such:
+	labels[('Temporal', 'Asynchronous')] = 0
+	labels[('Temporal','Synchrony')] = 1
+	labels[('Contingency','Cause')] = 2
+	labels[('Contingency','Condition')] = 3
+	labels[('Contingency','Pragmatic cause')] = 4
+	labels[('Contingency','Pragmatic condition')] = 5
+	labels[('Comparison','Contrast')] = 6
+	labels[('Comparison','Pragmatic contrast')] = 7
+	labels[('Comparison','Concession')] = 8
+	labels[('Comparison','Pragmatic concession')] = 9
+	labels[('Expansion','Instantiation')] = 10
+	labels[('Expansion','Restatement')] = 11
+	labels[('Expansion','Alternative')] = 12
+	labels[('Expansion','Exception')] = 13
+	labels[('Expansion','Conjunction')] = 14
+	labels[('Expansion','List')] = 15
+
+	ret_labels = []
+	sentences1 = []
+	sentences2 = []
+	with open(data_file) as f:
+		for line in f:
+			tokens = line.split('|')
+			label = tokens[11]
+			count = label.count('.')
+			if count > 0:
+				strs = label.split('.')
+				lab_vec = np.zeros(16)
+				lab_vec[labels[(strs[0], strs[1])]] = 1
+				ret_labels.append(lab_vec)
+				sentences1.append(tokens[24])
+				sentences2.append(tokens[34])
+		total = len(ret_labels)
+		ls = Counter()
+		for l in ret_labels:
+			idx = np.argmax(l)
+			ls[idx] += 1
+		mx = 0
+		for i in range(15):
+			if ls[i] > mx:
+				mx = ls[i]
+		print("Accuracy if we did nothing: " + str(float(mx)/total))
+	return sentences1, sentences2, ret_labels
+
+def load_labels_and_data(model, data_file, smallSentences=False):
+	labels = {}
+	#print "Loading model"
+	#model = gs.models.KeyedVectors.load_word2vec_format(model_file, binary=True)
+	#model = gs.models.Word2Vec.load_word2vec_format(model_file, binary=True)
+	#print "Model loaded"
 	# default these to the most popular sub-categories
 	labels['Temporal'] = 0
 	labels['Contingency'] = 2
@@ -45,8 +97,9 @@ def load_labels_and_data(model_file, data_file, smallSentences=False):
 			count = label.count('.')
 			if count > 0:
 				strs = label.split('.')
-				if strs[1] == 'Pragmatic concession':
-					strs[1] = 'Concession'
+				# ?? shouldn't be doing this anymore
+				#if strs[1] == 'Pragmatic concession':
+				#	strs[1] = 'Concession'
 				lab_vec = np.zeros(16)
 				lab_vec[labels[(strs[0], strs[1])]] = 1
 				#ret_labels.append(labels[(strs[0], strs[1])])

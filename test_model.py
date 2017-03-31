@@ -81,9 +81,8 @@ tf.add_to_collection('y', y)
 with tf.Session() as sess:
 	sess.run(init)
 	step = 1
-	sentences1, sentences2, labels = data_helpers.load_labels_and_data(\
-		'./Data/GoogleNews-vectors-negative300.bin', \
-		'./Data/implicitTrainPDTB.txt')
+	model = data_helpers.load_model()
+	sentences1, sentences2, labels = data_helpers.load_labels_and_data(model, './Data/implicitTrainPDTB.txt')
 	total = 0
 
 	while total < training_iters:
@@ -129,7 +128,7 @@ with tf.Session() as sess:
 	# test accuracy on dev set
 	print("accuracy on dev set:")
 	sentences12, sentences22, labels2 = data_helpers.load_labels_and_data(\
-		'./Data/GoogleNews-vectors-negative300.bin', \
+		model, \
 		'./Data/devImplicitPDTB.txt')                          
 	print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2})))
 
