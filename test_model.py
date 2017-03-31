@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 import data_helpers
 
-learning_rate = 0.01
+learning_rate = 0.001
 training_iters = 300000
 batch_size = 64
 display_step = 10
@@ -100,8 +100,8 @@ with tf.Session() as sess:
 				"{:.6f}".format(loss) + ", Training Accuracy= " + \
 				"{:.5f}".format(acc)
 			#extract variables here
-			w2 = sess.run(biases['w'])
-			print(w2)
+			#w2 = sess.run(biases['w'])
+			#print(w2)
 		step += 1
 	print "Training finished!"
 
