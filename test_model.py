@@ -51,6 +51,7 @@ x12 = tf.reshape(x1, [-1, n_input])
 x22 = tf.reshape(x2, [-1, n_input])                                                                                                                                                 
 x12 = tf.matmul(x12, weights['w2'])                                                                                                                                            
 x22 = tf.matmul(x22, weights['w2'])
+tf.Print(weights['w2'], [weights['w2']])
 #x12 = tf.reshape(x12, [-1, 300])
 #x22 = tf.reshape(x22, [-1, 300])
 x12 = tf.reshape(x12, [-1, 300]) + biases['w']
@@ -95,10 +96,10 @@ with tf.Session() as sess:
 		sess.run(optimizer, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
 		if step % display_step == 0:
 			#calculate batch loss and accuracy
-			loss, acc, w2 = sess.run([cost, accuracy, weights['w2']], feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
+			loss, acc = sess.run([cost, accuracy], feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
 			print "Iter " + str(total) + ", Minibatch Loss= " + \
                   "{:.6f}".format(loss) + ", Training Accuracy= " + \
-                  "{:.5f}".format(acc) + ", Weights= " + tf.Print(w2, [w2])
+                  "{:.5f}".format(acc)
 		step += 1
 	print "Training finished!"
 
