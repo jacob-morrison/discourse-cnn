@@ -98,7 +98,7 @@ with tf.Session() as sess:
 			loss, acc, w2 = sess.run([cost, accuracy, weights['w2']], feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
 			print "Iter " + str(total) + ", Minibatch Loss= " + \
                   "{:.6f}".format(loss) + ", Training Accuracy= " + \
-                  "{:.5f}".format(acc) + ", Weights= " + tf.Print(w2)
+                  "{:.5f}".format(acc) + ", Weights= " + tf.Print(w2, [w2])
 		step += 1
 	print "Training finished!"
 
