@@ -22,7 +22,7 @@ y = tf.placeholder(tf.float32, [None, n_classes])
 # Store layers weight & bias
 weights = {
 	'w': tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1]),
-	'out': tf.Variable(tf.random_normal([sen_dim, sen_dim, n_classes],dtype=tf.float32))
+	'out': tf.Variable(tf.random_normal([sen_dim, sen_dim * n_classes],dtype=tf.float32))
 }
 
 biases = {
@@ -38,10 +38,10 @@ x22 = tf.reshape(x22, [-1, sen_dim])
 x12 = tf.tanh(x12)
 x22 = tf.tanh(x22)
 
-w = tf.reshape(weights['out'], [sen_dim, -1])
-pred = tf.matmul(x12, w)
+pred = tf.matmul(x12, weights['out'])
 pred = tf.reshape(pred, [sen_dim, -1])
-pred = tf.add(tf.matmul(x22, pred), biases['out'])
+pred = tf.reshape(tf.matmul(x22, pred), [-1, n_classes])
+pred = tf.add(pred, biases['out'])
 
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
