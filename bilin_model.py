@@ -33,12 +33,13 @@ x12 = tf.reshape(x1, [-1, n_input])
 x22 = tf.reshape(x2, [-1, n_input])                                                                                                                                                 
 x12 = tf.matmul(x12, weights['w'])                                                                                                                                            
 x22 = tf.matmul(x22, weights['w'])
-x12 = tf.reshape(x12, [-1, 300])
-x22 = tf.reshape(x22, [-1, 300])
+x12 = tf.reshape(x12, [-1, sen_dim])
+x22 = tf.reshape(x22, [-1, sen_dim])
 x12 = tf.tanh(x12)
 x22 = tf.tanh(x22)
 
-pred = tf.matmul(x12, weights['out'])
+w = tf.reshape(weights['out'], [sen_dim, -1])
+pred = tf.matmul(x12, w)
 pred = tf.add(tf.matmul(x22, pred), biases['out'])
 
 # define loss and optimizer
