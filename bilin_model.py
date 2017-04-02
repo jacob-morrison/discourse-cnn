@@ -40,6 +40,7 @@ x22 = tf.tanh(x22)
 
 w = tf.reshape(weights['out'], [sen_dim, -1])
 pred = tf.matmul(x12, w)
+pred = tf.reshape(pred, [sen_dim, n_classes])
 pred = tf.add(tf.matmul(x22, pred), biases['out'])
 
 # define loss and optimizer
