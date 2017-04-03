@@ -40,6 +40,7 @@ x22 = tf.tanh(x22)
 
 pred = tf.matmul(x12, weights['out'])
 pred = tf.reshape(pred, [-1, sen_dim, n_classes])
+x22 = tf.reshape(x22,[-1, 1, sen_dim])
 pred = tf.batch_matmul(x22, pred)
 pred = tf.reshape(pred, [-1,n_classes])
 pred = tf.add(pred, biases['out'])
