@@ -38,24 +38,12 @@ x22 = tf.reshape(x22, [-1, sen_dim])
 x12 = tf.tanh(x12)
 x22 = tf.tanh(x22)
 
-x1s = tf.split(0, x1.get_shape()[0], x12)
-x2s = tf.split(0, x2.get_shape()[0], x22)
-
-for i in range(len(x1s)):
-	curr = tf.matmul(x1s[i], weights['out'])
-	curr = tf.reshape(curr, [sen_dim, -1])
-	curr = tf.reshape(tf.matmul(x2s[i], pred), [-1, n_classes])
-	curr = tf.add(curr, biases['out'])
-	if i == 0:
-		pred = curr
-	else:
-		pred = tf.concat(0, [pred, curr])
-'''
 pred = tf.matmul(x12, weights['out'])
-pred = tf.reshape(pred, [sen_dim, -1])
-pred = tf.reshape(tf.matmul(x22, pred), [-1, n_classes])
+pred = tf.reshape(pred, [-1, sen_dim, n_classes])
+pred = tf.batch_matmul(x22, pred)
+pred = tf.reshape(pred, [-1,n_classes])
 pred = tf.add(pred, biases['out'])
-'''
+
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
