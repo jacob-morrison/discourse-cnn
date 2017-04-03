@@ -4,8 +4,8 @@ import tensorflow as tf
 import numpy as np
 import data_helpers
 
-learning_rate = 0.001
-training_iters = 600000
+learning_rate = 0.01
+training_iters = 1000000
 batch_size = 64
 display_step = 10
 
@@ -42,7 +42,7 @@ pred = tf.matmul(x12, weights['out'])
 pred = tf.reshape(pred, [-1, sen_dim, n_classes])
 x22 = tf.reshape(x22,[-1, 1, sen_dim])
 pred = tf.batch_matmul(x22, pred)
-pred = tf.reshape(pred, [-1,n_classes])
+pred = tf.reshape(pred, [-1, n_classes])
 pred = tf.add(pred, biases['out'])
 
 # define loss and optimizer
