@@ -5,7 +5,7 @@ import numpy as np
 import data_helpers
 
 learning_rate = 0.001
-training_iters = 250000
+training_iters = 100000
 batch_size = 64
 display_step = 10
 
@@ -21,9 +21,9 @@ y = tf.placeholder(tf.float32, [None, n_classes])
 
 # Store layers weight & bias
 weights = {
-	#'w': tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1]),
+	'w': tf.constant(1.0/75, dtype=tf.float32, shape=[n_input,1]),
 	#'w': tf.Variable(tf.random_normal([n_input,1], mean=1.0/75, stddev=1/300, dtype=tf.float32)),
-	'w': tf.Variable(tf.random_normal([n_input,1], mean=1.0/75, stddev=0, dtype=tf.float32)),
+	#'w': tf.Variable(tf.random_normal([n_input,1], mean=1.0/75, stddev=0, dtype=tf.float32)),
 	'out': tf.Variable(tf.random_normal([sen_dim, sen_dim * n_classes],dtype=tf.float32))
 }
 
