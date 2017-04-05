@@ -5,7 +5,7 @@ import numpy as np
 import data_helpers
 
 learning_rate = 0.001
-training_iters = 500000
+training_iters = 750000
 batch_size = 64
 display_step = 10
 
