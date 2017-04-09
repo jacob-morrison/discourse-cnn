@@ -154,12 +154,13 @@ def test(data_file):
 def pad_or_cut(sen):
 	sen_len = 75
 	#words = sen.replace('\'', ' \' ').replace('"', ' " ').replace('.', ' . ').replace(',', ' , ').replace('-', ' - ').replace('$', ' $ ').split(" ")
-	sen = sen.replace('\'', ' \' ')
+	#sen = sen.replace('\'', ' \' ')
 	#sen = sen.replace('"', ' " ')
 	#sen = sen.replace(',', ' , ')
 	#sen = sen.replace('-', ' - ')
 	#sen = sen.replace('$', ' $ ')
 	#sen = sen.replace('.', ' . ')
+	sen = sen.replace('\'','').replace('"','').replace(',','').replace('-','').replace('.','')
 	words = sen.split()
 	l = len(words)
 	if l > sen_len:
