@@ -159,7 +159,7 @@ def pad_or_cut(sen):
 	#sen = sen.replace(',', ' , ')
 	#sen = sen.replace('-', ' - ')
 	#sen = sen.replace('$', ' $ ')
-	#sen = sen.replace('.', ' . ')
+	sen = sen.replace('.', ' . ')
 	words = sen.split()
 	l = len(words)
 	if l > sen_len:
