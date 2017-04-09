@@ -63,10 +63,10 @@ def load_labels_and_data(model, data_file, smallSentences=False):
 	#model = gs.models.Word2Vec.load_word2vec_format(model_file, binary=True)
 	#print "Model loaded"
 	# default these to the most popular sub-categories
-	labels['Temporal'] = 0
-	labels['Contingency'] = 2
-	labels['Comparison'] = 6
-	labels['Expansion'] = 13
+	#labels['Temporal'] = 0
+	#labels['Contingency'] = 2
+	#labels['Comparison'] = 6
+	#labels['Expansion'] = 13
 
 	# otherwise assign them as such:
 	labels[('Temporal', 'Asynchronous')] = 0
@@ -153,7 +153,7 @@ def test(data_file):
 
 def pad_or_cut(sen):
 	sen_len = 75
-	words = sen.split(" ")
+	words = sen.replace('\'', ' \' ').replace('"', ' " ').replace('.', ' . ').replace(',', ' , ').replace('-', ' - ').split(" ")
 	l = len(words)
 	if l > sen_len:
 		ret_sen = words[:sen_len]
