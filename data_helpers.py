@@ -182,6 +182,28 @@ def get_sentence_matrix(sentence, model):
 			mat = np.column_stack([mat, np.zeros(300, dtype=float)])
 	return mat, np.mean(mat, axis=1)
 
+def test2():
+	model = load_model('./Data/GoogleNews-vectors-negative300.bin')
+	try:
+		m = model['Chicago']
+		print(m)
+	except:
+		print("Chicago - issue")
+	try:
+		m = model['Chicago\'s']
+		print(m)
+	except:
+		print("Chicago's - issue")
+	try:
+		m = model['.']
+		print(m)
+	except:
+		print(". - issue")
+	try:
+		m = model['"wrong"']
+		print(m)
+	except:
+		print('"wrong" - issue')
 
 if __name__ == '__main__':
-	test(sys.argv[1])
+	test2()
