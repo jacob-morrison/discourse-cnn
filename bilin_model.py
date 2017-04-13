@@ -119,5 +119,10 @@ with tf.Session() as sess:
 		'./Data/devImplicitPDTB.txt')                          
 	print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2})))
 
-
+	# test accuracy on dev set
+	print("accuracy on test set:")
+	sentences12, sentences22, labels2 = data_helpers.load_labels_and_data(\
+		model, \
+		'./Data/testImplicitPDTB.txt')                          
+	print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2})))
 
