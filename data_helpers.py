@@ -158,7 +158,7 @@ def pad_or_cut(sen):
 	#sen = sen.replace('"', ' " ')
 	#sen = sen.replace(',', ' , ')
 	#sen = sen.replace('-', ' - ')
-	#sen = sen.replace('$', ' $ ')
+	sen = sen.replace('$', ' $ ')
 	#sen = sen.replace('.', ' . ')
 	#sen = sen.replace('n\'t', ' not').replace('\'s','').replace('\'','').replace('"','').replace(',','').replace('-','').replace('.','')
 	#sen = sen.replace('\'', ' ')
