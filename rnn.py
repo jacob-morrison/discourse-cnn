@@ -1,7 +1,7 @@
 # Jacob Morrison
 
 import tensorflow as tf
-from tensorflow.contrib import rnn
+from tensorflow.python.ops import rnn
 import numpy as np
 import data_helpers
 import os
