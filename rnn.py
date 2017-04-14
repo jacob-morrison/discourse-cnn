@@ -33,26 +33,25 @@ biases = {
     'out': tf.Variable(tf.random_normal([n_classes]))
 }
 
-def RNN(x):
+def RNN(x, cell):
     # split input into n_words [batch_size, n_dim] tensors
     x = tf.unstack(x, n_words, 2)
 
-    # define an LSTM cell
-    lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
-
     # get the output of the cell
-    outputs, states = rnn.rnn(lstm_cell, x, dtype=tf.float32)
+    outputs, states = rnn.rnn(cell, x, dtype=tf.float32)
 
     # return last output from cell
     return outputs[-1]
 
 
+# define an LSTM cell
+lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 
 # need to get a prediction for each sentence
 
 # get the vector representation of each word
-pred1 = RNN(x1)
-pred2 = RNN(x2)
+pred1 = RNN(x1, lstm_cell)
+pred2 = RNN(x2, lstm_cell)
 
 # do something with both representations
 # simple concatenation?
