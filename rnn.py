@@ -45,7 +45,8 @@ def RNN(x, cell):
 
 
 # define an LSTM cell
-lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
+with VarScope('cell'):
+    lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 
 # need to get a prediction for each sentence
 
