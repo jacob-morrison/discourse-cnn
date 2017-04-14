@@ -45,17 +45,16 @@ def RNN(x, cell):
 
 
 # define an LSTM cell
-with tf.variable_scope('cell1'):
-    cell1 = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
-
-with tf.variable_scope('cell2'):
-    cell2 = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
+lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 
 # need to get a prediction for each sentence
 
 # get the vector representation of each word
-pred1 = RNN(x1, cell1)
-pred2 = RNN(x2, cell2)
+with tf.variable_scope('scope1') as scope1:
+    pred1 = RNN(x1, cell1)
+with tf.variable_scope('scope1') as scope1:
+    scope1.reuse_variables()
+    pred2 = RNN(x2, cell2)
 
 # do something with both representations
 # simple concatenation?
