@@ -10,7 +10,7 @@ import datetime
 
 # parameters
 learning_rate = 0.01
-training_iters = 300000
+training_iters = 250000
 batch_size = 256
 display_step = 10
 
