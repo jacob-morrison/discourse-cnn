@@ -56,17 +56,8 @@ def load_labels_and_sentences(data_file):
 		print("Accuracy if we did nothing: " + str(float(mx)/total))
 	return sentences1, sentences2, ret_labels
 
-def load_labels_and_data(model, data_file, smallSentences=False):
+def load_labels_and_data(model, data_file, smallSentences=False, pad_sentences=True):
 	labels = {}
-	#print "Loading model"
-	#model = gs.models.KeyedVectors.load_word2vec_format(model_file, binary=True)
-	#model = gs.models.Word2Vec.load_word2vec_format(model_file, binary=True)
-	#print "Model loaded"
-	# default these to the most popular sub-categories
-	#labels['Temporal'] = 0
-	#labels['Contingency'] = 2
-	#labels['Comparison'] = 6
-	#labels['Expansion'] = 13
 
 	# otherwise assign them as such:
 	labels[('Temporal', 'Asynchronous')] = 0
@@ -97,15 +88,15 @@ def load_labels_and_data(model, data_file, smallSentences=False):
 			count = label.count('.')
 			if count > 0:
 				strs = label.split('.')
-				# ?? shouldn't be doing this anymore
-				#if strs[1] == 'Pragmatic concession':
-				#	strs[1] = 'Concession'
 				lab_vec = np.zeros(16)
 				lab_vec[labels[(strs[0], strs[1])]] = 1
-				#ret_labels.append(labels[(strs[0], strs[1])])
 				ret_labels.append(lab_vec)
-				sentence1 = pad_or_cut(tokens[24])
-				sentence2 = pad_or_cut(tokens[34])
+				if pad_sentences:
+					sentence1 = pad_or_cut(tokens[24])
+					sentence2 = pad_or_cut(tokens[34])
+				else:
+					sentence1 = tokens[24].split()
+					sentence2 = tokens[34].split()
 				bigSen1, smallSen1 = get_sentence_matrix(sentence1, model)
 				bigSen2, smallSen2 = get_sentence_matrix(sentence2, model)
 				if (smallSentences):
@@ -170,11 +161,6 @@ def pad_or_cut(sen):
 	#sen = sen.replace('0', ' 0 ').replace('1', ' 1 ').replace('2', ' 2 ').replace('3', ' 3 ').replace('4', ' 4 ')
 	#sen = sen.replace('5', ' 5 ').replace('6', ' 6 ').replace('7', ' 7 ').replace('8', ' 8 ').replace('9', ' 9 ')
 	words = sen.split()
-	#for i in range(len(words)):
-	#if '1' in words[i]:
-	#	words[i] = '1'
-	#elif '0' in words[i]:
-	#	words[i] = '0'
 	l = len(words)
 	if l > sen_len:
 		ret_sen = words[:sen_len]
