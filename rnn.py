@@ -11,7 +11,7 @@ import datetime
 # parameters
 learning_rate = 0.01
 training_iters = 130000
-batch_size = 128
+batch_size = 256
 display_step = 10
 
 # network parameters
