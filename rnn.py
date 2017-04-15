@@ -10,7 +10,7 @@ import datetime
 
 # parameters
 learning_rate = 0.01
-training_iters = 300000
+training_iters = 100000
 batch_size = 128
 display_step = 10
 
@@ -58,7 +58,7 @@ with tf.variable_scope('scope1') as scope1:
 
 # do something with both representations
 # simple concatenation?
-out = tf.concat(1, [pred1, pred2])
+out = tf.tanh(tf.concat(1, [pred1, pred2]))
 
 # predict the relation class
 pred = tf.add(tf.matmul(out, weights['out']), biases['out'])
