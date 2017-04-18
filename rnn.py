@@ -41,7 +41,7 @@ def RNN(x, cell, lengths):
 
     # get the output of the cell
     #outputs, states = rnn.rnn(cell, x, dtype=tf.float32)
-    outputs, states = rnn.dynamic_rnn(cell=cell, inputs=x, dtype=tf.float32, sequence_length=lengths)
+    outputs, states = rnn.dynamic_rnn(cell=cell, inputs=x, dtype=tf.float32, sequence_length=lengths, time_major=True)
 
     # return last output from cell
     return outputs[-1]
@@ -54,10 +54,10 @@ lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 
 # get the vector representation of each word
 with tf.variable_scope('scope1') as scope1:
-    pred1 = RNN(tf.transpose(x1, perm=[0, 2, 1]), lstm_cell, x1_len)
+    pred1 = RNN(tf.transpose(x1, perm=[2, 0, 1]), lstm_cell, x1_len)
 with tf.variable_scope('scope1') as scope1:
     scope1.reuse_variables()
-    pred2 = RNN(tf.transpose(x2, perm=[0, 2, 1]), lstm_cell, x2_len)
+    pred2 = RNN(tf.transpose(x2, perm=[2, 0, 1]), lstm_cell, x2_len)
 
 # do something with both representations
 # simple concatenation?
@@ -145,6 +145,6 @@ with tf.Session() as sess:
         model, \
         './Data/devImplicitPDTB.txt', \
         False, \
-        True)                          
+        True, True)                          
     print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, x1_len: lengths12, x2_len: lengths22})))
 
