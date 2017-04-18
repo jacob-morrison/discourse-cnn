@@ -35,7 +35,7 @@ biases = {
     'out': tf.Variable(tf.random_normal([n_classes]))
 }
 
-def RNN(x, cell, lengths):
+def RNN(x, cell):
     # split input into n_words [batch_size, n_dim] tensors
     x = tf.unstack(x, n_words, 2)
 
@@ -46,6 +46,11 @@ def RNN(x, cell, lengths):
     # return last output from cell
     return outputs[-1]
 
+def Dynamic_RNN(x, cell, lengths):
+    # get output of the cell
+    outputs, _ = rnn.dynamic_rnn(cell=cell, inputs=x, dtype=tf.float32, sequence_length=lengths, time_major=False)
+
+    return outputs
 
 # define an LSTM cell
 lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
@@ -54,12 +59,12 @@ lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 
 # get the vector representation of each word
 with tf.variable_scope('scope1') as scope1:
-    #pred1 = RNN(tf.transpose(x1, perm=[2, 0, 1]), lstm_cell, x1_len)
-    pred1 = RNN(x1, lstm_cell, x1_len)
+    pred1 = Dynamic_RNN(tf.transpose(x1, perm=[0, 2, 1]), lstm_cell, x1_len)#, [-1, n_hidden]
+    #pred1 = RNN(x1, lstm_cell)
 with tf.variable_scope('scope1') as scope1:
     scope1.reuse_variables()
-    #pred2 = RNN(tf.transpose(x2, perm=[2, 0, 1]), lstm_cell, x2_len)
-    pred2 = RNN(x2, lstm_cell, x2_len)
+    pred2 = Dynamic_RNN(tf.transpose(x2, perm=[0, 2, 1]), lstm_cell, x2_len)
+    #pred2 = RNN(x2, lstm_cell)
 
 # do something with both representations
 # simple concatenation?
