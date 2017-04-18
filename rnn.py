@@ -21,8 +21,8 @@ n_hidden = 256 # hidden layer num of features
 n_classes = 16 # 15 total senses
 
 # tf graph input
-x1 = tf.placeholder(tf.float32, [None, n_dim, n_words])
-x2 = tf.placeholder(tf.float32, [None, n_dim, n_words])
+x1 = tf.placeholder(tf.float32, [None, n_dim, None])
+x2 = tf.placeholder(tf.float32, [None, n_dim, None])
 y = tf.placeholder(tf.float32, [None, n_classes])
 
 # Define weights
