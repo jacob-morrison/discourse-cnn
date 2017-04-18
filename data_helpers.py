@@ -188,7 +188,10 @@ def get_sentence_matrix(sentence, model):
 			mat = np.column_stack([mat, model[word]])
 		except:
 			mat = np.column_stack([mat, np.zeros(300, dtype=float)])
-	return mat, np.mean(mat, axis=1)
+	if (len(sentence)) > 1:
+		return mat, np.mean(mat, axis=1)
+	else:
+		return mat, mat
 
 def test2():
 	model = load_model('./Data/GoogleNews-vectors-negative300.bin')
