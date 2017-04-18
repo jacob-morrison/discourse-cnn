@@ -110,7 +110,7 @@ with tf.Session() as sess:
     step = 1
     model = data_helpers.load_model('./Data/GoogleNews-vectors-negative300.bin')
     sentences1, sentences2, labels, lengths1, lengths2 = \
-                data_helpers.load_labels_and_data(model, './Data/implicitTrainPDTB.txt', False, False, True)
+                data_helpers.load_labels_and_data(model, './Data/implicitTrainPDTB.txt', False, True, True)
     total = 0
 
     while total < training_iters:
@@ -166,6 +166,6 @@ with tf.Session() as sess:
         model, \
         './Data/devImplicitPDTB.txt', \
         False, \
-        False, True)                          
+        True, True)                          
     print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, x1_len: lengths12, x2_len: lengths22})))
 
