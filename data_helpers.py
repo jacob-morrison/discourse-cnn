@@ -151,7 +151,7 @@ def test(data_file):
 				total100 += 1
 	print(str(total) + " " + str(total50) + " " + str(total75) + " " + str(total100))
 
-def pad_or_cut(sen):
+def pad_or_cut(words):
 	sen_len = 75
 	#words = sen.replace('\'', ' \' ').replace('"', ' " ').replace('.', ' . ').replace(',', ' , ').replace('-', ' - ').replace('$', ' $ ').split(" ")
 	#sen = sen.replace('\'', ' \' ')
