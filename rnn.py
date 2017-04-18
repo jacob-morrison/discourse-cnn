@@ -54,10 +54,12 @@ lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 
 # get the vector representation of each word
 with tf.variable_scope('scope1') as scope1:
-    pred1 = RNN(tf.transpose(x1, perm=[2, 0, 1]), lstm_cell, x1_len)
+    #pred1 = RNN(tf.transpose(x1, perm=[2, 0, 1]), lstm_cell, x1_len)
+    pred1 = RNN(x1, lstm_cell, x1_len)
 with tf.variable_scope('scope1') as scope1:
     scope1.reuse_variables()
-    pred2 = RNN(tf.transpose(x2, perm=[2, 0, 1]), lstm_cell, x2_len)
+    #pred2 = RNN(tf.transpose(x2, perm=[2, 0, 1]), lstm_cell, x2_len)
+    pred2 = RNN(x2, lstm_cell, x2_len)
 
 # do something with both representations
 # simple concatenation?
