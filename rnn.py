@@ -62,13 +62,13 @@ def BiRNN(x, f_cell, b_cell):
     return outputs[-1]
 
 # define an LSTM cell
-lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
+#lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 
 # forwards cell
-#lstm_cell_forwards = tf.nn.rnn_cell.BasicLSTMCell(n_hidden/2, forget_bias=1.0)
+lstm_cell_forwards = tf.nn.rnn_cell.BasicLSTMCell(n_hidden/2, forget_bias=1.0)
 
 # backwards cell
-#lstm_cell_backwards = tf.nn.rnn_cell.BasicLSTMCell(n_hidden/2, forget_bias=1.0)
+lstm_cell_backwards = tf.nn.rnn_cell.BasicLSTMCell(n_hidden/2, forget_bias=1.0)
 
 # need to get a prediction for each sentence
 
