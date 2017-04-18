@@ -54,6 +54,9 @@ def Dynamic_RNN(x, cell, lengths):
     return outputs[-1]
 
 def BiRNN(x, f_cell, b_cell):
+
+    x = tf.unstack(x, n_words, 2)
+
     outputs, _, _ = rnn.bidirectional_rnn(f_cell, b_cell, x, dtype=tf.float32)
 
     return outputs[-1]
@@ -72,13 +75,13 @@ lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 # get the vector representation of each word
 with tf.variable_scope('scope1') as scope1:
     #pred1 = Dynamic_RNN(tf.transpose(x1, perm=[0, 2, 1]), lstm_cell, x1_len)#, [-1, n_hidden])
-    pred1 = RNN(x1, lstm_cell)
-    #pred1 = BiRNN(x1, lstm_cell_forwards, lstm_cell_backwards)
+    #pred1 = RNN(x1, lstm_cell)
+    pred1 = BiRNN(x1, lstm_cell_forwards, lstm_cell_backwards)
 with tf.variable_scope('scope1') as scope1:
     scope1.reuse_variables()
     #pred2 = Dynamic_RNN(tf.transpose(x2, perm=[0, 2, 1]), lstm_cell, x2_len)#, [-1, n_hidden])
-    pred2 = RNN(x2, lstm_cell)
-    #pred2 = BiRNN(x2, lstm_cell_forwards, lstm_cell_backwards)
+    #pred2 = RNN(x2, lstm_cell)
+    pred2 = BiRNN(x2, lstm_cell_forwards, lstm_cell_backwards)
 
 # do something with both representations
 # simple concatenation?
