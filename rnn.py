@@ -11,13 +11,13 @@ import datetime
 # parameters
 learning_rate = 0.001
 training_iters = 250000
-batch_size = 64
+batch_size = 512
 display_step = 10
 
 # network parameters
 n_words = 75 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 n_dim = 300
-n_hidden = 256 # hidden layer num of features
+n_hidden = 600 # hidden layer num of features
 n_classes = 16 # 15 total senses
 
 # tf graph input
