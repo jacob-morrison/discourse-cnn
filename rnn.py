@@ -46,11 +46,12 @@ def RNN(x, cell):
     # return last output from cell
     return outputs[-1]
 
+# this returns all outputs, which is wrong. need to find the last relevant output (aka at seqlen)
 def Dynamic_RNN(x, cell, lengths):
     # get output of the cell
     outputs, _ = rnn.dynamic_rnn(cell=cell, inputs=x, dtype=tf.float32, sequence_length=lengths, time_major=False)
 
-    return outputs
+    return outputs[-1]
 
 # define an LSTM cell
 lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
@@ -59,11 +60,11 @@ lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
 
 # get the vector representation of each word
 with tf.variable_scope('scope1') as scope1:
-    pred1 = tf.reshape(Dynamic_RNN(tf.transpose(x1, perm=[0, 2, 1]), lstm_cell, x1_len), [-1, n_hidden])
+    pred1 = Dynamic_RNN(tf.transpose(x1, perm=[0, 2, 1]), lstm_cell, x1_len)#, [-1, n_hidden])
     #pred1 = RNN(x1, lstm_cell)
 with tf.variable_scope('scope1') as scope1:
     scope1.reuse_variables()
-    pred2 = tf.reshape(Dynamic_RNN(tf.transpose(x2, perm=[0, 2, 1]), lstm_cell, x2_len), [-1, n_hidden])
+    pred2 = Dynamic_RNN(tf.transpose(x2, perm=[0, 2, 1]), lstm_cell, x2_len)#, [-1, n_hidden])
     #pred2 = RNN(x2, lstm_cell)
 
 # do something with both representations
@@ -96,7 +97,7 @@ with tf.Session() as sess:
     step = 1
     model = data_helpers.load_model('./Data/GoogleNews-vectors-negative300.bin')
     sentences1, sentences2, labels, lengths1, lengths2 = \
-                data_helpers.load_labels_and_data(model, './Data/implicitTrainPDTB.txt', False, True, True)
+                data_helpers.load_labels_and_data(model, './Data/implicitTrainPDTB.txt', False, False, True)
     total = 0
 
     while total < training_iters:
@@ -152,6 +153,6 @@ with tf.Session() as sess:
         model, \
         './Data/devImplicitPDTB.txt', \
         False, \
-        True, True)                          
+        False, True)                          
     print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, x1_len: lengths12, x2_len: lengths22})))
 
