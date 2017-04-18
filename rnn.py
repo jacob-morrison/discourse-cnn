@@ -37,11 +37,11 @@ biases = {
 
 def RNN(x, cell, lengths):
     # split input into n_words [batch_size, n_dim] tensors
-    #x = tf.unstack(x, n_words, 2)
+    x = tf.unstack(x, n_words, 2)
 
     # get the output of the cell
-    #outputs, states = rnn.rnn(cell, x, dtype=tf.float32)
-    outputs, states = rnn.dynamic_rnn(cell=cell, inputs=x, dtype=tf.float32, sequence_length=lengths, time_major=True)
+    outputs, states = rnn.rnn(cell, x, dtype=tf.float32)
+    #outputs, states = rnn.dynamic_rnn(cell=cell, inputs=x, dtype=tf.float32, sequence_length=lengths, time_major=True)
 
     # return last output from cell
     return outputs[-1]
