@@ -56,7 +56,7 @@ def load_labels_and_sentences(data_file):
 		print("Accuracy if we did nothing: " + str(float(mx)/total))
 	return sentences1, sentences2, ret_labels
 
-def load_labels_and_data(model, data_file, smallSentences=False, pad_sentences=True):
+def load_labels_and_data(model, data_file, smallSentences=False, pad_sentences=True, return_lengths=False):
 	labels = {}
 
 	# otherwise assign them as such:
@@ -81,6 +81,8 @@ def load_labels_and_data(model, data_file, smallSentences=False, pad_sentences=T
 	ret_labels = []
 	sentences1 = []
 	sentences2 = []
+	lengths1 = []
+	lengths2 = []
 	with open(data_file) as f:
 		for line in f:
 			tokens = line.split('|')
@@ -92,8 +94,12 @@ def load_labels_and_data(model, data_file, smallSentences=False, pad_sentences=T
 				lab_vec[labels[(strs[0], strs[1])]] = 1
 				ret_labels.append(lab_vec)
 				if pad_sentences:
-					sentence1 = pad_or_cut(tokens[24])
-					sentence2 = pad_or_cut(tokens[34])
+					sen1 = tokens[24].split()
+					sen2 = tokens[34].split()
+					lengths1.append(len(sen1))
+					lengths2.append(len(sen2))
+					sentence1 = pad_or_cut(sen1)
+					sentence2 = pad_or_cut(sen2)
 				else:
 					sentence1 = tokens[24].split()
 					sentence2 = tokens[34].split()
@@ -115,7 +121,10 @@ def load_labels_and_data(model, data_file, smallSentences=False, pad_sentences=T
 			if ls[i] > mx:
 				mx = ls[i]
 		print("Accuracy if we did nothing: " + str(float(mx)/total))
-	return sentences1, sentences2, ret_labels
+	if return_lengths:
+		return sentences1, sentences2, ret_labels, lengths1, lengths2
+	else:
+		return sentences1, sentences2, ret_labels
 
 def test(data_file):
 	total = 0
@@ -160,7 +169,7 @@ def pad_or_cut(sen):
 	#sen = sen.replace('.', ' ')
 	#sen = sen.replace('0', ' 0 ').replace('1', ' 1 ').replace('2', ' 2 ').replace('3', ' 3 ').replace('4', ' 4 ')
 	#sen = sen.replace('5', ' 5 ').replace('6', ' 6 ').replace('7', ' 7 ').replace('8', ' 8 ').replace('9', ' 9 ')
-	words = sen.split()
+	#words = sen.split()
 	l = len(words)
 	if l > sen_len:
 		ret_sen = words[:sen_len]

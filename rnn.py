@@ -23,6 +23,8 @@ n_classes = 16 # 15 total senses
 # tf graph input
 x1 = tf.placeholder(tf.float32, [None, n_dim, None])
 x2 = tf.placeholder(tf.float32, [None, n_dim, None])
+x1_len = tf.placeholder(tf.float32, [None])
+x2_len = tf.placeholder(tf.float32, [None])
 y = tf.placeholder(tf.float32, [None, n_classes])
 
 # Define weights
@@ -85,7 +87,8 @@ with tf.Session() as sess:
     sess.run(init)
     step = 1
     model = data_helpers.load_model('./Data/GoogleNews-vectors-negative300.bin')
-    sentences1, sentences2, labels = data_helpers.load_labels_and_data(model, './Data/implicitTrainPDTB.txt', False, True)
+    sentences1, sentences2, labels, lengths1, lengths2 = \
+                data_helpers.load_labels_and_data(model, './Data/implicitTrainPDTB.txt', False, True, True)
     total = 0
 
     while total < training_iters:
@@ -95,12 +98,15 @@ with tf.Session() as sess:
             end = len(sentences1)
         batch_x1 = sentences1[start : end]
         batch_x2 = sentences2[start : end]
+        batch_x1_lengths = lengths1[start : end]
+        batch_x2_lengths = lengths2[start : end]
         batch_y = labels[start : end]
         total += (len(batch_x1))
-        sess.run(optimizer, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
+        sess.run(optimizer, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y, x1_len: batch_x1_lengths, x2_len: batch_x2_lengths})
         if step % display_step == 0:
             #calculate batch loss and accuracy
-            loss, acc = sess.run([cost, accuracy], feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
+            loss, acc = sess.run([cost, accuracy], \
+                            feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y, x1_len: batch_x1_lengths, x2_len: batch_x2_lengths})
             print "Iter " + str(total) + ", Minibatch Loss= " + \
                 "{:.6f}".format(loss) + ", Training Accuracy= " + \
                 "{:.5f}".format(acc)
@@ -123,17 +129,21 @@ with tf.Session() as sess:
             end = len(sentences1)
         batch_x1 = sentences1[start : end]
         batch_x2 = sentences2[start : end]
+        batch_x1_lengths = lengths1[start : end]
+        batch_x2_lengths = lengths2[start : end]
         batch_y = labels[start : end]
-        acc += (float(len(batch_x1)) / len(sentences1)) * sess.run(accuracy, feed_dict={x1: batch_x1, x2: batch_x2, y: batch_y})
+        acc += (float(len(batch_x1)) / len(sentences1)) * \
+                            sess.run(accuracy, feed_dict={x1: batch_x1, x2: batch_x2, \
+                                y: batch_y, x1_len: batch_x1_lengths, x2_len: batch_x2_lengths})
         step += 1
     print(str(acc))
 
     # test accuracy on dev set
     print("accuracy on dev set:")
-    sentences12, sentences22, labels2 = data_helpers.load_labels_and_data(\
+    sentences12, sentences22, labels2, lengths12, lengths22 = data_helpers.load_labels_and_data(\
         model, \
         './Data/devImplicitPDTB.txt', \
         False, \
         True)                          
-    print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2})))
+    print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, x1_len: lengths12, x2_len: lengths22})))
 
