@@ -9,15 +9,15 @@ import time
 import datetime
 
 # parameters
-learning_rate = 0.001
-training_iters = 500000
-batch_size = 512
+learning_rate = 0.01
+training_iters = 200000
+batch_size = 64
 display_step = 10
 
 # network parameters
 n_words = 75 # truncate sentences (pad sentences with <PAD> tokens if less than this, cut off if larger)
 n_dim = 300
-n_hidden = 600 # hidden layer num of features
+n_hidden = 300 # hidden layer num of features
 n_classes = 16 # 15 total senses
 
 # tf graph input
@@ -75,13 +75,13 @@ lstm_cell_backwards = tf.nn.rnn_cell.BasicLSTMCell(n_hidden/2, forget_bias=1.0)
 # get the vector representation of each word
 with tf.variable_scope('scope1') as scope1:
     #pred1 = Dynamic_RNN(tf.transpose(x1, perm=[0, 2, 1]), lstm_cell, x1_len)#, [-1, n_hidden])
-    #pred1 = RNN(x1, lstm_cell)
-    pred1 = BiRNN(x1, lstm_cell_forwards, lstm_cell_backwards)
+    pred1 = RNN(x1, lstm_cell)
+    #pred1 = BiRNN(x1, lstm_cell_forwards, lstm_cell_backwards)
 with tf.variable_scope('scope1') as scope1:
     scope1.reuse_variables()
     #pred2 = Dynamic_RNN(tf.transpose(x2, perm=[0, 2, 1]), lstm_cell, x2_len)#, [-1, n_hidden])
-    #pred2 = RNN(x2, lstm_cell)
-    pred2 = BiRNN(x2, lstm_cell_forwards, lstm_cell_backwards)
+    pred2 = RNN(x2, lstm_cell)
+    #pred2 = BiRNN(x2, lstm_cell_forwards, lstm_cell_backwards)
 
 # do something with both representations
 # simple concatenation?
