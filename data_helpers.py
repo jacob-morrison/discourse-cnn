@@ -56,7 +56,7 @@ def load_labels_and_sentences(data_file):
 		print("Accuracy if we did nothing: " + str(float(mx)/total))
 	return sentences1, sentences2, ret_labels
 
-def load_labels_and_data(model, data_file, smallSentences=False, pad_sentences=True, return_lengths=False):
+def load_labels_and_data_PDTB(model, data_file, smallSentences=False, pad_sentences=True, return_lengths=False):
 	labels = {}
 
 	# otherwise assign them as such:
