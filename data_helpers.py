@@ -56,6 +56,39 @@ def load_labels_and_sentences(data_file):
 		print("Accuracy if we did nothing: " + str(float(mx)/total))
 	return sentences1, sentences2, ret_labels
 
+def load_data_SICK(model, data_file, pad_sentences=True, return_lengths=False):
+	labels = {}
+	labels['NEUTRAL'] = 0
+	labels['ENTAILMENT'] = 1
+	labels['CONTRADICTION'] = 2
+
+	ret_labels = []
+	sentences1 = []
+	sentences2 = []
+	lengths1 = []
+	lengths2 = []
+	with open(data_file) as f:
+		for line in f:
+			tokens = line.split('\t')
+			lab_vec = np.zeros(3)
+			lab_vec[labels[tokens[4]]] = 1
+			sen1 = tokens[1].split()
+			sen2 = tokens[2].split()
+			lengths1.append(len(sen1))
+			lengths2.append(len(sen2))
+			if pad_sentences:
+				sen1 = pad_or_cut(sen1)
+				sen2 = pad_or_cut(sen2)
+			ret_labels.append(lab_vec)
+			sentences1.append(sen1)
+			sentences2.append(sen2)
+	if return_lengths:
+		return sentences1, sentences2, ret_labels, lengths1, lengths2
+	else:
+		return sentences1, sentences2, ret_labels
+
+
+
 def load_labels_and_data_PDTB(model, data_file, smallSentences=False, pad_sentences=True, return_lengths=False):
 	labels = {}
 
@@ -93,16 +126,16 @@ def load_labels_and_data_PDTB(model, data_file, smallSentences=False, pad_senten
 				lab_vec = np.zeros(16)
 				lab_vec[labels[(strs[0], strs[1])]] = 1
 				ret_labels.append(lab_vec)
+				sen1 = tokens[24].split()
+				sen2 = tokens[34].split()
+				lengths1.append(len(sen1))
+				lengths2.append(len(sen2))
 				if pad_sentences:
-					sen1 = tokens[24].split()
-					sen2 = tokens[34].split()
-					lengths1.append(len(sen1))
-					lengths2.append(len(sen2))
 					sentence1 = pad_or_cut(sen1)
 					sentence2 = pad_or_cut(sen2)
 				else:
-					sentence1 = tokens[24].split()
-					sentence2 = tokens[34].split()
+					sentence1 = sen1
+					sentence2 = sen2
 				bigSen1, smallSen1 = get_sentence_matrix(sentence1, model)
 				bigSen2, smallSen2 = get_sentence_matrix(sentence2, model)
 				if (smallSentences):
@@ -151,8 +184,7 @@ def test(data_file):
 				total100 += 1
 	print(str(total) + " " + str(total50) + " " + str(total75) + " " + str(total100))
 
-def pad_or_cut(words):
-	sen_len = 75
+def pad_or_cut(words, sen_len=75):
 	#words = sen.replace('\'', ' \' ').replace('"', ' " ').replace('.', ' . ').replace(',', ' , ').replace('-', ' - ').replace('$', ' $ ').split(" ")
 	#sen = sen.replace('\'', ' \' ')
 	#sen = sen.replace('"', ' " ')
