@@ -72,20 +72,20 @@ def load_data_SICK(model, data_file, pad_sentences=True, return_lengths=False):
 		for line in f:
 			if i == 0:
 				i += 1
-				pass
-			tokens = line.split('\t')
-			lab_vec = np.zeros(3)
-			lab_vec[labels[tokens[4]]] = 1
-			sen1 = tokens[1].split()
-			sen2 = tokens[2].split()
-			lengths1.append(len(sen1))
-			lengths2.append(len(sen2))
-			if pad_sentences:
-				sen1 = pad_or_cut(sen1)
-				sen2 = pad_or_cut(sen2)
-			ret_labels.append(lab_vec)
-			sentences1.append(sen1)
-			sentences2.append(sen2)
+			else:
+				tokens = line.split('\t')
+				lab_vec = np.zeros(3)
+				lab_vec[labels[tokens[4]]] = 1
+				sen1 = tokens[1].split()
+				sen2 = tokens[2].split()
+				lengths1.append(len(sen1))
+				lengths2.append(len(sen2))
+				if pad_sentences:
+					sen1 = pad_or_cut(sen1)
+					sen2 = pad_or_cut(sen2)
+				ret_labels.append(lab_vec)
+				sentences1.append(sen1)
+				sentences2.append(sen2)
 	if return_lengths:
 		return sentences1, sentences2, ret_labels, lengths1, lengths2
 	else:
