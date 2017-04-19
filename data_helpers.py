@@ -73,7 +73,7 @@ def load_data_SICK(model, data_file, pad_sentences=True, return_lengths=False):
 			if i == 0:
 				i += 1
 			else:
-				tokens = line.split('\t')
+				tokens = line.strip().split('\t')
 				lab_vec = np.zeros(3)
 				lab_vec[labels[tokens[4]]] = 1
 				sen1 = tokens[1].split()
