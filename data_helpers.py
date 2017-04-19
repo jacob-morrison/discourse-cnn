@@ -84,8 +84,18 @@ def load_data_SICK(model, data_file, smallSentences=False, pad_sentences=True, r
 					sen1 = pad_or_cut(sen1)
 					sen2 = pad_or_cut(sen2)
 				ret_labels.append(lab_vec)
-				sentences1.append(get_sentence_matrix(sen1, model))
-				sentences2.append(get_sentence_matrix(sen2, model))
+				sentences1.append(get_sentence_matrix(sen1, model)[0])
+				sentences2.append(get_sentence_matrix(sen2, model)[0])
+	total = len(ret_labels)
+	ls = Counter()
+	for l in ret_labels:
+		idx = np.argmax(l)
+		ls[idx] += 1
+	mx = 0
+	for i in range(3):
+		if ls[i] > mx:
+			mx = ls[i]
+	print("Accuracy if we did nothing: " + str(float(mx)/total))
 	if return_lengths:
 		return sentences1, sentences2, ret_labels, lengths1, lengths2
 	else:
