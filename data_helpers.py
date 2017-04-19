@@ -67,8 +67,12 @@ def load_data_SICK(model, data_file, pad_sentences=True, return_lengths=False):
 	sentences2 = []
 	lengths1 = []
 	lengths2 = []
+	i = 0
 	with open(data_file) as f:
 		for line in f:
+			if i == 0:
+				i += 1
+				pass
 			tokens = line.split('\t')
 			lab_vec = np.zeros(3)
 			lab_vec[labels[tokens[4]]] = 1
