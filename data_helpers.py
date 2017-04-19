@@ -84,8 +84,8 @@ def load_data_SICK(model, data_file, smallSentences=False, pad_sentences=True, r
 					sen1 = pad_or_cut(sen1)
 					sen2 = pad_or_cut(sen2)
 				ret_labels.append(lab_vec)
-				sentences1.append(get_sentence_matrix(sen1))
-				sentences2.append(get_sentence_matrix(sen2))
+				sentences1.append(get_sentence_matrix(sen1, model))
+				sentences2.append(get_sentence_matrix(sen2, model))
 	if return_lengths:
 		return sentences1, sentences2, ret_labels, lengths1, lengths2
 	else:
