@@ -69,7 +69,7 @@ with tf.Session() as sess:
 	sess.run(init)
 	step = 1
 	model = data_helpers.load_model('./Data/GoogleNews-vectors-negative300.bin')
-	sentences1, sentences2, labels = data_helpers.load_labels_and_data_PDTB(model, './Data/PDTB_implict/train.txt')
+	sentences1, sentences2, labels = data_helpers.load_labels_and_data_PDTB(model, './Data/PDTB_implicit/train.txt')
 	total = 0
 
 	while total < training_iters:
