@@ -55,14 +55,15 @@ x2_context = tf.reshape(tf.reduce_mean(x2, axis=2), [-1, 300, 1])
 x1_tmp = tf.transpose(x1, [0, 2, 1])
 x2_tmp = tf.transpose(x2, [0, 2, 1])
 
-x1_weights = tf.nn.softmax(tf.batch_matmul(x1_tmp, x2_context), dim=1)
-x2_weights = tf.nn.softmax(tf.batch_matmul(x2_tmp, x1_context), dim=1)
+for i in range(2):
+	x1_weights = tf.nn.softmax(tf.batch_matmul(x1_tmp, x2_context), dim=1)
+	x2_weights = tf.nn.softmax(tf.batch_matmul(x2_tmp, x1_context), dim=1)
 
-x12 = tf.batch_matmul(x1, x1_weights)
-x22 = tf.batch_matmul(x2, x2_weights)
+	x1_context = tf.batch_matmul(x1, x1_weights)
+	x2_context = tf.batch_matmul(x2, x2_weights)
 
-x12 = tf.reshape(x12, [-1, sen_dim])
-x22 = tf.reshape(x22, [-1, sen_dim])
+x12 = tf.reshape(x1_context, [-1, sen_dim])
+x22 = tf.reshape(x2_context, [-1, sen_dim])
 
 x12 = tf.tanh(x12)
 x22 = tf.tanh(x22)
