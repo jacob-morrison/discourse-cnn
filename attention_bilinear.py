@@ -55,7 +55,7 @@ x2_context = tf.reshape(tf.reduce_mean(x2, axis=2), [-1, 300, 1])
 x1_tmp = tf.transpose(x1, [0, 2, 1])
 x2_tmp = tf.transpose(x2, [0, 2, 1])
 
-for i in range(2):
+for i in range(10):
 	x1_weights = tf.nn.softmax(tf.batch_matmul(x1_tmp, x2_context), dim=1)
 	x2_weights = tf.nn.softmax(tf.batch_matmul(x2_tmp, x1_context), dim=1)
 
