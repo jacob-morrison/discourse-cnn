@@ -160,7 +160,7 @@ with tf.Session() as sess:
 		sentences12, sentences22, labels2 = data_helpers.load_data_SICK(\
 			model, \
 			'./Data/SICK/dev.txt')
-	f1, acc, precision, recall = sess.run([f1, accuracy, precision, recall], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
+	acc, f1, precision, recall = sess.run([accuracy, f1, precision, recall], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
 	print('Accuracy: ' + str(acc))
 	print('F1: ' + str(f1))
 	print('Precision: ' + str(precision))
