@@ -98,6 +98,7 @@ tf.add_to_collection('y', y)
 
 with tf.Session() as sess:
 	sess.run(init)
+	sess.run(tf.local_variables_initializer())
 	step = 1
 	model = data_helpers.load_model('./Data/GoogleNews-vectors-negative300.bin')
 	if sys.argv[1] == 'PDTB':
