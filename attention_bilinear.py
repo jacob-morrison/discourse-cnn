@@ -3,6 +3,7 @@
 import tensorflow as tf
 import numpy as np
 import data_helpers
+import sklearn
 import sys
 
 if sys.argv[1] == 'PDTB':
@@ -82,6 +83,9 @@ optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 # Evaluate model
 correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
+precision = tf.contrib.metrics.streaming_precision(pred, y)
+recall = tf.contrib.metrics.streaming_recall(pred, y)
+f1 = 2 * (precision * recall)/(precision + recall)
 
 # initializing all variables
 init = tf.global_variables_initializer()
@@ -153,7 +157,9 @@ with tf.Session() as sess:
 		sentences12, sentences22, labels2 = data_helpers.load_data_SICK(\
 			model, \
 			'./Data/SICK/dev.txt')
-	print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2})))
+	f1, acc = sess.run([f1, accuracy], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
+	print('Accuracy: ' + str(acc))
+	print('F1: ' + str(f1))
 
 '''
 	# test accuracy on dev set
