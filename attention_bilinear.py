@@ -82,8 +82,8 @@ optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 # Evaluate model
 correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
-precision = tf.contrib.metrics.streaming_precision(pred, y)
-recall = tf.contrib.metrics.streaming_recall(pred, y)
+precision, _ = tf.contrib.metrics.streaming_precision(pred, y)
+recall, _ = tf.contrib.metrics.streaming_recall(pred, y)
 f1 = 2 * (precision * recall)/(precision + recall)
 
 # initializing all variables
