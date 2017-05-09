@@ -74,7 +74,6 @@ x22 = tf.reshape(x22,[-1, 1, sen_dim])
 pred = tf.batch_matmul(x22, pred)
 pred = tf.reshape(pred, [-1, n_classes])
 pred = tf.add(pred, biases['out'])
-pred = tf.argmax(pred, 1)
 
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
@@ -82,6 +81,7 @@ optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # Evaluate model
 correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
+pred = tf.argmax(pred, 1)
 accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 precision, _ = tf.contrib.metrics.streaming_precision(pred, y)
 recall, _ = tf.contrib.metrics.streaming_recall(pred, y)
