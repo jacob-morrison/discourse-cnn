@@ -159,7 +159,7 @@ with tf.Session() as sess:
 			'./Data/SICK/dev.txt')
 	f1, acc = sess.run([f1, accuracy], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
 	print('Accuracy: ' + str(acc))
-	print('F1: ' + str(f1))
+	print('F1: ' + str(sess.run(f1)))
 
 '''
 	# test accuracy on dev set
