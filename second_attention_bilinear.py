@@ -50,8 +50,8 @@ biases = {
 # -> for each embedding in arg1: find similarity to context vector for arg2
 # -> softmax result vector
 #	-> these are now weights
-x1_context = tf.reshape(tf.reduce_mean(x1, axis=2), [-1, 300, 1])
-x2_context = tf.reshape(tf.reduce_mean(x2, axis=2), [-1, 300, 1])
+x1_context = tf.reshape(tf.reduce_mean(x1, axis=2), [-1, 300])
+x2_context = tf.reshape(tf.reduce_mean(x2, axis=2), [-1, 300])
 
 x1_tmp = tf.reshape(tf.transpose(x1, [0, 2, 1]), [-1, 300])
 x2_tmp = tf.reshape(tf.transpose(x2, [0, 2, 1]), [-1, 300])
