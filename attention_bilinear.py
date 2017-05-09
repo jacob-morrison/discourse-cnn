@@ -74,6 +74,7 @@ x22 = tf.reshape(x22,[-1, 1, sen_dim])
 pred = tf.batch_matmul(x22, pred)
 pred = tf.reshape(pred, [-1, n_classes])
 pred = tf.add(pred, biases['out'])
+pred = tf.argmax(pred, 1)
 
 # define loss and optimizer
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
