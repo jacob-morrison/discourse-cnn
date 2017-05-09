@@ -3,7 +3,6 @@
 import tensorflow as tf
 import numpy as np
 import data_helpers
-import sklearn
 import sys
 
 if sys.argv[1] == 'PDTB':
