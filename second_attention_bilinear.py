@@ -60,11 +60,11 @@ x2_tmp = tf.reshape(tf.transpose(x2, [0, 2, 1]), [-1, 300])
 	#x1_weights = tf.nn.softmax(tf.batch_matmul(x1_tmp, x2_context), dim=1)
 	#x2_weights = tf.nn.softmax(tf.batch_matmul(x2_tmp, x1_context), dim=1)
 
-x1_w_tmp = tf.matmul(x1_tmp, weights['w'])
+x1_w_tmp = tf.transpose(tf.matmul(x1_tmp, weights['w']), [1, 0])
 x1_weights = tf.batch_matmul(tf.reshape(x2_context, [-1, 1, sen_dim]), x1_w_tmp)#tf.reshape(x1_w_tmp, [-1, sen_dim, n_classes]))
 x1_weights = tf.nn.softmax(x1_weights, dim=1)
 
-x2_w_tmp = tf.matmul(x2_tmp, weights['w'])
+x2_w_tmp = tf.transpose(tf.matmul(x2_tmp, weights['w']), [1, 0])
 x2_weights = tf.batch_matmul(tf.reshape(x1_context, [-1, 1, sen_dim]), x2_w_tmp)#tf.reshape(x2_w_tmp, [-1, sen_dim, n_classes]))
 x2_weights = tf.nn.softmax(x2_weights, dim=1)
 
