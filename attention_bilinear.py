@@ -163,8 +163,8 @@ with tf.Session() as sess:
 		sentences12, sentences22, labels2 = data_helpers.load_data_SICK(\
 			model, \
 			'./Data/SICK/dev.txt')
-	acc, conf_mat = sess.run([accuracy, conf_mat], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
-	prec, acc = sess.run([precision, recall], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
+	acc, prec, rec, conf_mat = sess.run([accuracy, update_prec_op, update_rec_op, conf_mat], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
+	prec, rec = sess.run([precision, recall], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
 	print('Accuracy: ' + str(acc))
 	#print('F1: ' + str(f1))
 	print('Precision: ' + str(precision.eval()))
