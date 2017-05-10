@@ -83,8 +83,8 @@ optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
 #pred = tf.argmax(pred, 1)
 accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
-precision, _ = tf.contrib.metrics.streaming_precision(tf.argmax(pred, 1), tf.argmax(y, 1))
-recall, _ = tf.contrib.metrics.streaming_recall(tf.argmax(pred, 1), tf.argmax(y, 1))
+precision, update_prec_op = tf.contrib.metrics.streaming_precision(tf.argmax(pred, 1), tf.argmax(y, 1))
+recall, update_rec_op = tf.contrib.metrics.streaming_recall(tf.argmax(pred, 1), tf.argmax(y, 1))
 f1 = 2 * (precision * recall)/(precision + recall)
 conf_mat = tf.contrib.metrics.confusion_matrix(tf.argmax(y, 1), tf.argmax(pred, 1))
 
@@ -163,9 +163,9 @@ with tf.Session() as sess:
 		sentences12, sentences22, labels2 = data_helpers.load_data_SICK(\
 			model, \
 			'./Data/SICK/dev.txt')
-	acc, f1, precision, recall, conf_mat = sess.run([accuracy, f1, precision, recall, conf_mat], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
+	acc, prec, rec, conf_mat = sess.run([accuracy, update_prec_op, update_rec_op, conf_mat], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
 	print('Accuracy: ' + str(acc))
-	print('F1: ' + str(f1))
+	#print('F1: ' + str(f1))
 	print('Precision: ' + str(precision))
 	print('Recall: ' + str(recall))
 	print('Confusion matrix: ' + str(conf_mat))
