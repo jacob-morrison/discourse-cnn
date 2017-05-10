@@ -167,8 +167,8 @@ with tf.Session() as sess:
 	prec, acc = sess.run([precision, recall], feed_dict={x1: sentences12, x2: sentences22, y: labels2})
 	print('Accuracy: ' + str(acc))
 	#print('F1: ' + str(f1))
-	print('Precision: ' + str(precision))
-	print('Recall: ' + str(recall))
+	print('Precision: ' + str(precision.eval()))
+	print('Recall: ' + str(recall.eval()))
 	print('Confusion matrix: ' + str(conf_mat))
 
 '''
