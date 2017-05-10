@@ -4,6 +4,7 @@ import tensorflow as tf
 import numpy as np
 import data_helpers
 import sys
+import csv
 
 if sys.argv[1] == 'PDTB':
 	learning_rate = 0.01
@@ -170,6 +171,9 @@ with tf.Session() as sess:
 	print('Precision: ' + str(precision.eval()))
 	print('Recall: ' + str(recall.eval()))
 	print('Confusion matrix: ' + str(conf_mat))
+	with open('output.csv', 'wb') as csvfile:
+		writer = csv.writer(csvfile)
+		writer.writerows(conf_mat)
 
 '''
 	# test accuracy on dev set
