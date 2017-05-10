@@ -86,7 +86,7 @@ accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 precision, _ = tf.contrib.metrics.streaming_precision(pred, y)
 recall, _ = tf.contrib.metrics.streaming_recall(pred, y)
 f1 = 2 * (precision * recall)/(precision + recall)
-conf_mat = tf.contrib.metrics.confusin_matrix(y, pred)
+conf_mat = tf.contrib.metrics.confusion_matrix(y, pred)
 
 # initializing all variables
 init = tf.global_variables_initializer()
