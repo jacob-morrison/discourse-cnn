@@ -7,7 +7,7 @@ import sys
 
 if sys.argv[1] == 'PDTB':
 	learning_rate = 0.01
-	training_iters = 250000
+	training_iters = 100000
 	n_classes = 16 # 15 total senses
 elif sys.argv[1] == 'SICK':
 	learning_rate = 0.01
