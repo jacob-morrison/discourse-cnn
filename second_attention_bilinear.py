@@ -6,8 +6,8 @@ import data_helpers
 import sys
 
 if sys.argv[1] == 'PDTB':
-	learning_rate = 0.001
-	training_iters = 400000
+	learning_rate = 0.0001
+	training_iters = 500000
 	n_classes = 16 # 15 total senses
 elif sys.argv[1] == 'SICK':
 	learning_rate = 0.01
