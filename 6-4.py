@@ -78,6 +78,6 @@ results = open('results-6.csv', 'w')
 for i in xrange(20, 2000):
 	string = generate(i)
 	pairs, tyme = RNA(string)
-	results.write(str(time) + ',' + str(i) + '\n')
+	results.write(str(tyme) + ',' + str(i) + '\n')
 	print(i)
 	#print(str(pairs) + " Pairs in " + str(tyme) + " seconds.")
