@@ -70,7 +70,7 @@ def BiRNN(x, f_cell, b_cell):
 
     outputs, _, _ = rnn.bidirectional_rnn(f_cell, b_cell, x, dtype=tf.float32)
 
-    return tf.pack(tf.transpose(outputs), [1, 0, 2])
+    return tf.pack(tf.transpose(outputs, [1, 0, 2]))
 
 # define an LSTM cell
 lstm_cell = tf.nn.rnn_cell.BasicLSTMCell(n_hidden, forget_bias=1.0)
