@@ -114,8 +114,6 @@ for i in range(1):
 x12 = tf.reshape(x1_context, [-1, n_dim])
 x22 = tf.reshape(x2_context, [-1, n_dim])
 
-pred = 
-
 # normal
 out = tf.tanh(tf.concat(1, [x12, x22]))
 
