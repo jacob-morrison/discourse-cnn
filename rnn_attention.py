@@ -40,8 +40,8 @@ y = tf.placeholder(tf.float32, [None, n_classes])
 
 # Define weights
 weights = {
-    'out': tf.Variable(tf.random_normal([n_hidden*2, n_classes]), dtype=tf.float32)
-    #'out': tf.Variable(tf.random_normal([sen_dim, sen_dim * n_classes],dtype=tf.float32))
+    #'out': tf.Variable(tf.random_normal([n_hidden*2, n_classes]), dtype=tf.float32)
+    'out': tf.Variable(tf.random_normal([sen_dim, sen_dim * n_classes],dtype=tf.float32))
 }
 biases = {
     'out': tf.Variable(tf.random_normal([n_classes]))
@@ -115,15 +115,24 @@ x12 = tf.reshape(x1_context, [-1, n_dim])
 x22 = tf.reshape(x2_context, [-1, n_dim])
 
 # normal
-out = tf.tanh(tf.concat(1, [x12, x22]))
+'''out = tf.tanh(tf.concat(1, [x12, x22]))
 
 # predict the relation class
 pred = tf.add(tf.matmul(out, weights['out']), biases['out'])
 
 # define loss and optimizer
-
+'''
 
 # bilinear
+x12 = tf.tanh(x12)
+x22 = tf.tanh(x22)
+
+pred = tf.matmul(x12, weights['out'])
+pred = tf.reshape(pred, [-1, sen_dim, n_classes])
+x22 = tf.reshape(x22,[-1, 1, sen_dim])
+pred = tf.batch_matmul(x22, pred)
+pred = tf.reshape(pred, [-1, n_classes])
+pred = tf.add(pred, biases['out'])
 
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
