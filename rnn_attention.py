@@ -40,7 +40,8 @@ y = tf.placeholder(tf.float32, [None, n_classes])
 
 # Define weights
 weights = {
-    'out': tf.Variable(tf.random_normal([n_hidden*2, n_classes]))
+    'out': tf.Variable(tf.random_normal([n_hidden*2, n_classes]), dtype=tf.float32)
+    #'out': tf.Variable(tf.random_normal([sen_dim, sen_dim * n_classes],dtype=tf.float32))
 }
 biases = {
     'out': tf.Variable(tf.random_normal([n_classes]))
@@ -113,12 +114,19 @@ for i in range(1):
 x12 = tf.reshape(x1_context, [-1, n_dim])
 x22 = tf.reshape(x2_context, [-1, n_dim])
 
+pred = 
+
+# normal
 out = tf.tanh(tf.concat(1, [x12, x22]))
 
 # predict the relation class
 pred = tf.add(tf.matmul(out, weights['out']), biases['out'])
 
 # define loss and optimizer
+
+
+# bilinear
+
 cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
