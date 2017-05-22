@@ -13,7 +13,7 @@ test = sys.argv[1]
 
 if test == 'PDTB':
     learning_rate = 0.001
-    training_iters = 250000
+    training_iters = 150000
     n_classes = 16 # 15 total senses
 
 elif test == 'SICK':
