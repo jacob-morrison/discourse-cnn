@@ -230,8 +230,8 @@ with tf.Session() as sess:
     out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model"))
     # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
     checkpoint_prefix = os.path.join(out_dir, "model")
-    if not os.path.exists(checkpoint_dir):
-        os.makedirs(checkpoint_dir)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
     path = saver.save(sess, checkpoint_prefix, global_step=1)
     print("Saved model checkpoint to {}\n".format(path))
 
