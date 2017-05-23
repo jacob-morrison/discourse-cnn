@@ -226,7 +226,10 @@ with tf.Session() as sess:
             False, \
             True, True)   
     print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, x1_len: lengths12, x2_len: lengths22})))
-
+    pred = prediction.eval(feed_dict={x1: sentences12, x2: sentences22})
+    results = open('results-' + test + '.txt', 'w')
+    results.write(labels2)
+    results.write(pred)
     out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model"))
     # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
     checkpoint_prefix = os.path.join(out_dir, "model")
@@ -234,4 +237,3 @@ with tf.Session() as sess:
         os.makedirs(out_dir)
     path = saver.save(sess, checkpoint_prefix, global_step=1)
     print("Saved model checkpoint to {}\n".format(path))
-
