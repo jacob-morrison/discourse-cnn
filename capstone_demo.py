@@ -24,5 +24,10 @@ with tf.Session() as sess:
     	sen_mat1, _ = data_helpers.get_sentence_matrix(data_helpers.pad_or_cut(raw_input().split()), model)
     	print("Second sentence?")
     	sen_mat2, _ = data_helpers.get_sentence_matrix(data_helpers.pad_or_cut(raw_input().split()), model)
-    	#prediction = sess.run(our_predictions, feed_dict={x1: [sen_mat1], x2: [sen_mat2], y: [0], x1_len: [1], x2_len: [1]})
-    	print(prediction.eval(feed_dict={x1: [sen_mat1], x2: [sen_mat2]}))#, y: [0]}))#, x1_len: [1], x2_len: [1]}))
+    	pred = prediction.eval(feed_dict={x1: [sen_mat1], x2: [sen_mat2]})[0]
+    	if pred == 0:
+    		print("NEUTRAL")
+    	elif pred == 1:
+    		print("ENTAILMENT")
+    	elif pred == 2:
+    		print("CONTRADICTION")
