@@ -229,7 +229,7 @@ with tf.Session() as sess:
     prediction = tf.get_collection('our_predictions')[0]
     pred = prediction.eval(feed_dict={x1: sentences12, x2: sentences22})
     results = open('results-' + test + '.txt', 'w')
-    results.write(labels2)
+    results.write(labels2.tolist())
     results.write(pred)
     out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model-" + test))
     # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
