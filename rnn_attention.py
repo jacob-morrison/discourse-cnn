@@ -151,7 +151,7 @@ tf.add_to_collection('accuracy', accuracy)
 tf.add_to_collection('x1', x1)
 tf.add_to_collection('x2', x2)
 tf.add_to_collection('y', y)
-tf.add_to_collection('our_predictions', predictions)
+tf.add_to_collection('our_predictions', our_predictions)
 with tf.Session() as sess:
     sess.run(init)
     step = 1
