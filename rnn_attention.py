@@ -230,7 +230,7 @@ with tf.Session() as sess:
     results = open('results-' + test + '.txt', 'w')
     results.write(labels2)
     results.write(pred)
-    out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model"))
+    out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model-" + test))
     # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
     checkpoint_prefix = os.path.join(out_dir, "model")
     if not os.path.exists(out_dir):
