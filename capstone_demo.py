@@ -10,7 +10,7 @@ checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
 
 with tf.Session() as sess:
     model = data_helpers.load_model('./Data/GoogleNews-vectors-negative300.bin')
-	print("Loading graph")
+    print("Loading graph")
 	saver = tf.train.import_meta_graph("{}.meta".format(checkpoint_file))
 	saver.restore(sess, checkpoint_file)
 	accuracy = tf.get_collection('accuracy')[0]
