@@ -13,7 +13,7 @@ test = sys.argv[1]
 
 if test == 'PDTB':
     learning_rate = 0.01
-    training_iters = 100000
+    training_iters = 1000
     n_classes = 16 # 15 total senses
 
 elif test == 'SICK':
@@ -226,6 +226,7 @@ with tf.Session() as sess:
             False, \
             True, True)   
     print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2, x1_len: lengths12, x2_len: lengths22})))
+    prediction = tf.get_collection('our_predictions')[0]
     pred = prediction.eval(feed_dict={x1: sentences12, x2: sentences22})
     results = open('results-' + test + '.txt', 'w')
     results.write(labels2)
