@@ -12,7 +12,7 @@ import sys
 test = sys.argv[1]
 
 if test == 'PDTB':
-    learning_rate = 0.001
+    learning_rate = 0.01
     training_iters = 100000
     n_classes = 16 # 15 total senses
 
@@ -108,8 +108,10 @@ for i in range(1):
     x1_weights = tf.nn.softmax(tf.batch_matmul(h_states1, x2_context), dim=1)
     x2_weights = tf.nn.softmax(tf.batch_matmul(h_states2, x1_context), dim=1)
 
-    x1_context = tf.batch_matmul(x1, x1_weights)
-    x2_context = tf.batch_matmul(x2, x2_weights)
+    #x1_context = tf.batch_matmul(x1, x1_weights)
+    #x2_context = tf.batch_matmul(x2, x2_weights)
+    x1_context = tf.batch_matmul(h_states1, x1_weights)
+    x2_context = tf.batch_matmul(h_states2, x2_weights)
 
 x12 = tf.reshape(x1_context, [-1, n_dim])
 x22 = tf.reshape(x2_context, [-1, n_dim])
