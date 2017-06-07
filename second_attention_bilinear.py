@@ -168,7 +168,7 @@ with tf.Session() as sess:
 			model, \
 			'./Data/SICK/dev.txt')
 	print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2})))
-    prediction = tf.get_collection('our_predictions')[0]
+	prediction = tf.get_collection('our_predictions')[0]
     pred = prediction.eval(feed_dict={x1: sentences12, x2: sentences22})
     results = open('bilinear-results-' + test + '.txt', 'w')
     for i in range(len(labels2)):
