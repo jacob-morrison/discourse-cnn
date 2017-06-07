@@ -26,8 +26,8 @@ with tf.Session() as sess:
     	sen_mat2, _ = data_helpers.get_sentence_matrix(data_helpers.pad_or_cut(raw_input().split()), model)
     	pred = prediction.eval(feed_dict={x1: [sen_mat1], x2: [sen_mat2]})[0]
     	if pred == 0:
-    		print("NEUTRAL")
+    		print("NEUTRAL\n")
     	elif pred == 1:
-    		print("ENTAILMENT")
+    		print("ENTAILMENT\n")
     	elif pred == 2:
-    		print("CONTRADICTION")
+    		print("CONTRADICTION\n")
