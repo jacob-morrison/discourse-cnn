@@ -4,9 +4,10 @@ import tensorflow as tf
 import numpy as np
 import data_helpers
 import sys
+import os
 test = sys.argv[1]
 if sys.argv[1] == 'PDTB':
-	learning_rate = 0.001
+	learning_rate = 0.01
 	training_iters = 1000000
 	n_classes = 16 # 15 total senses
 elif sys.argv[1] == 'SICK':
