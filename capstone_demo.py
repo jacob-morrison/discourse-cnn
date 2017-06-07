@@ -5,7 +5,7 @@ import os
 import time
 import datetime
 
-checkpoint_dir = './runs/best_model/'
+checkpoint_dir = './runs/best_model_bilinear-SICK/'
 checkpoint_file = tf.train.latest_checkpoint(checkpoint_dir)
 
 with tf.Session() as sess:
