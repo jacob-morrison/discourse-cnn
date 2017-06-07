@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 import data_helpers
 import sys
-
+test = sys.argv[1]
 if sys.argv[1] == 'PDTB':
 	learning_rate = 0.001
 	training_iters = 1000000
