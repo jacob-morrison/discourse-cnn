@@ -93,6 +93,7 @@ cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, label
 optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
 # Evaluate model
+our_predictions = tf.argmax(pred, 1)
 correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
@@ -105,7 +106,7 @@ tf.add_to_collection('accuracy', accuracy)
 tf.add_to_collection('x1', x1)
 tf.add_to_collection('x2', x2)
 tf.add_to_collection('y', y)
-
+tf.add_to_collection('our_predictions', our_predictions)
 with tf.Session() as sess:
 	sess.run(init)
 	step = 1
@@ -167,7 +168,18 @@ with tf.Session() as sess:
 			model, \
 			'./Data/SICK/dev.txt')
 	print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2})))
-
+    prediction = tf.get_collection('our_predictions')[0]
+    pred = prediction.eval(feed_dict={x1: sentences12, x2: sentences22})
+    results = open('bilinear-results-' + test + '.txt', 'w')
+    for i in range(len(labels2)):
+        results.write(str(np.argmax(labels2[i], axis=0)) + "," + str(pred[i]) + "\n")
+    out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model_bilinear-" + test))
+    # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
+    checkpoint_prefix = os.path.join(out_dir, "model")
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    path = saver.save(sess, checkpoint_prefix, global_step=1)
+    print("Saved model checkpoint to {}\n".format(path))
 '''
 	# test accuracy on dev set
 	print("accuracy on test set:")
