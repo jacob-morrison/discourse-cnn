@@ -174,12 +174,12 @@ with tf.Session() as sess:
 	for i in range(len(labels2)):
 		results.write(str(np.argmax(labels2[i], axis=0)) + "," + str(pred[i]) + "\n")
 	out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model_bilinear-" + test))
-    # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
-    checkpoint_prefix = os.path.join(out_dir, "model")
-    if not os.path.exists(out_dir):
-    	os.makedirs(out_dir)
-    path = saver.save(sess, checkpoint_prefix, global_step=1)
-    print("Saved model checkpoint to {}\n".format(path))
+	# Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
+	checkpoint_prefix = os.path.join(out_dir, "model")
+	if not os.path.exists(out_dir):
+		os.makedirs(out_dir)
+	path = saver.save(sess, checkpoint_prefix, global_step=1)
+	print("Saved model checkpoint to {}\n".format(path))
 '''
 	# test accuracy on dev set
 	print("accuracy on test set:")
