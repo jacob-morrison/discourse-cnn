@@ -169,11 +169,11 @@ with tf.Session() as sess:
 			'./Data/SICK/dev.txt')
 	print(str(sess.run(accuracy, feed_dict={x1: sentences12, x2: sentences22, y: labels2})))
 	prediction = tf.get_collection('our_predictions')[0]
-    pred = prediction.eval(feed_dict={x1: sentences12, x2: sentences22})
-    results = open('bilinear-results-' + test + '.txt', 'w')
-    for i in range(len(labels2)):
-    	results.write(str(np.argmax(labels2[i], axis=0)) + "," + str(pred[i]) + "\n")
-    out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model_bilinear-" + test))
+	pred = prediction.eval(feed_dict={x1: sentences12, x2: sentences22})
+	results = open('bilinear-results-' + test + '.txt', 'w')
+	for i in range(len(labels2)):
+		results.write(str(np.argmax(labels2[i], axis=0)) + "," + str(pred[i]) + "\n")
+	out_dir = os.path.abspath(os.path.join(os.path.curdir, "runs", "best_model_bilinear-" + test))
     # Checkpoint directory. Tensorflow assumes this directory already exists so we need to create it
     checkpoint_prefix = os.path.join(out_dir, "model")
     if not os.path.exists(out_dir):
