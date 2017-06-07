@@ -110,8 +110,8 @@ for i in range(1):
 
     #x1_context = tf.batch_matmul(x1, x1_weights)
     #x2_context = tf.batch_matmul(x2, x2_weights)
-    x1_context = tf.batch_matmul(h_states1, x1_weights)
-    x2_context = tf.batch_matmul(h_states2, x2_weights)
+    x1_context = tf.batch_matmul(tf.transpose(h_states1, [0, 2, 1]), x1_weights)
+    x2_context = tf.batch_matmul(tf.transpose(h_states2, [0, 2, 1]), x2_weights)
 
 x12 = tf.reshape(x1_context, [-1, n_dim])
 x22 = tf.reshape(x2_context, [-1, n_dim])
